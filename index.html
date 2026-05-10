@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>North NJ Services - Local Business Directory for Northern New Jersey</title>
+    <meta name="description" content="Find trusted local businesses in Northern New Jersey. Plumbers, electricians, HVAC, landscaping, computer repair, and more serving Passaic, Bergen, Morris, and Sussex counties.">
+    <link rel="canonical" href="https://northnjservices.com">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1a1a2e; background: #f8f9fa; line-height: 1.6; }
+        .header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); color: #fff; padding: 2rem 1rem; text-align: center; }
+        .header h1 { font-size: 2.2rem; margin-bottom: .5rem; }
+        .header p { font-size: 1.1rem; opacity: .9; }
+        .header .tagline { font-size: .95rem; opacity: .7; margin-top: .5rem; }
+        .nav { background: #16213e; display: flex; flex-wrap: wrap; justify-content: center; gap: .25rem; padding: .75rem 1rem; position: sticky; top: 0; z-index: 100; }
+        .nav a { color: #e0e0e0; text-decoration: none; padding: .4rem .8rem; border-radius: 4px; font-size: .85rem; transition: background .2s; }
+        .nav a:hover { background: rgba(255,255,255,.15); color: #fff; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 1.5rem 1rem; }
+        .section-title { font-size: 1.5rem; color: #0f3460; margin: 2rem 0 1rem; padding-bottom: .5rem; border-bottom: 2px solid #e94560; }
+        .categories { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .cat-card { background: #fff; border-radius: 8px; padding: 1.25rem; box-shadow: 0 2px 8px rgba(0,0,0,.08); transition: transform .2s, box-shadow .2s; }
+        .cat-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,.12); }
+        .cat-card h3 { color: #0f3460; margin-bottom: .5rem; font-size: 1.1rem; }
+        .cat-card h3 a { color: #0f3460; text-decoration: none; }
+        .cat-card h3 a:hover { color: #e94560; }
+        .cat-card p { font-size: .9rem; color: #555; }
+        .cat-card .count { display: inline-block; background: #e94560; color: #fff; font-size: .75rem; padding: .15rem .5rem; border-radius: 10px; margin-top: .5rem; }
+        .business-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .biz-card { background: #fff; border-radius: 8px; padding: 1.25rem; box-shadow: 0 2px 8px rgba(0,0,0,.08); border-left: 3px solid #0f3460; }
+        .biz-card h3 { color: #1a1a2e; font-size: 1.05rem; margin-bottom: .3rem; }
+        .biz-card .biz-cat { font-size: .8rem; color: #e94560; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
+        .biz-card .biz-info { margin-top: .5rem; font-size: .88rem; color: #444; }
+        .biz-card .biz-info span { display: block; margin: .2rem 0; }
+        .biz-card .biz-area { font-size: .82rem; color: #888; margin-top: .4rem; font-style: italic; }
+        .biz-card .biz-website { font-size: .85rem; color: #0f3460; text-decoration: none; font-weight: 500; }
+        .biz-card .biz-website:hover { text-decoration: underline; }
+        .biz-card .biz-rating { margin-top: .3rem; }
+        .biz-card .biz-rating .stars { color: #f59e0b; font-size: .9rem; }
+        .biz-card .biz-rating .rating-count { font-size: .78rem; color: #888; }
+        .cta-section { background: linear-gradient(135deg, #e94560, #c23152); color: #fff; text-align: center; padding: 2rem 1rem; margin: 2rem 0; border-radius: 8px; }
+        .cta-section h2 { font-size: 1.4rem; margin-bottom: .5rem; }
+        .cta-section p { opacity: .9; margin-bottom: 1rem; }
+        .cta-section a { display: inline-block; background: #fff; color: #e94560; padding: .6rem 1.5rem; border-radius: 4px; text-decoration: none; font-weight: 600; transition: transform .2s; }
+        .cta-section a:hover { transform: scale(1.05); }
+        .footer { background: #1a1a2e; color: #aaa; text-align: center; padding: 1.5rem 1rem; font-size: .85rem; }
+        .footer a { color: #e94560; text-decoration: none; }
+        .ad-banner { max-width: 728px; margin: 2.5rem auto 1rem; border: 2px dashed #ccc; border-radius: 6px; background: #f0f0f0; text-align: center; padding: 2rem 1rem; color: #999; }
+        .ad-banner .ad-label { font-size: .7rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: .4rem; }
+        .ad-banner .ad-cta { font-size: 1.1rem; font-weight: 600; color: #888; margin-bottom: .5rem; }
+        .ad-banner .ad-link { font-size: .85rem; color: #e94560; text-decoration: none; }
+        .ad-banner .ad-link:hover { text-decoration: underline; }
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.6rem; }
+            .categories, .business-list { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>North NJ Services</h1>
+    <p>Your Local Business Directory for Northern New Jersey</p>
+    <div class="tagline">Passaic &bull; Bergen &bull; Morris &bull; Sussex Counties</div>
+</div>
+
+<nav class="nav">
+    <a href="/category/plumbing.html">Plumbing</a>
+    <a href="/category/electrical.html">Electrical</a>
+    <a href="/category/hvac.html">HVAC</a>
+    <a href="/category/landscaping.html">Landscaping</a>
+    <a href="/category/computers.html">Computers &amp; IT</a>
+    <a href="/category/cleaning.html">Cleaning</a>
+    <a href="/category/roofing.html">Roofing</a>
+    <a href="/category/painting.html">Painting</a>
+</nav>
+
+<div class="container">
+
+    <div class="cta-section">
+        <h2>Need Tech Help for Your Business?</h2>
+        <p>Phone systems, AI setup, computer support, and IT services for small businesses in North NJ.</p>
+        <a href="/contact.html">Get in Touch</a>
+    </div>
+
+    <h2 class="section-title">Browse by Category</h2>
+    <div class="categories">
+        <a href="/category/plumbing.html" class="cat-card" style="text-decoration:none;color:inherit;">
+            <h3>🔧 Plumbing</h3>
+            <p>Licensed plumbers for repairs, installations, and emergencies.</p>
+            <span class="count">34 listings</span>
+        </a>
+        <a href="/category/electrical.html" class="cat-card" style="text-decoration:none;color:inherit;">
+            <h3>⚡ Electrical</h3>
+            <p>Certified electricians for residential and commercial work.</p>
+            <span class="count">24 listings</span>
+        </a>
+        <a href="/category/hvac.html" class="cat-card" style="text-decoration:none;color:inherit;">
+            <h3>❄️ HVAC</h3>
+            <p>Heating, cooling, and ventilation specialists.</p>
+            <span class="count">21 listings</span>
+        </a>
+        <a href="/category/landscaping.html" class="cat-card" style="text-decoration:none;color:inherit;">
+            <h3>🌿 Landscaping</h3>
+            <p>Lawn care, landscaping design, and seasonal maintenance.</p>
+            <span class="count">17 listings</span>
+        </a>
+        <a href="/category/computers.html" class="cat-card" style="text-decoration:none;color:inherit;">
+            <h3>💻 Computers &amp; IT</h3>
+            <p>Computer repair, networking, and IT support.</p>
+            <span class="count">17 listings</span>
+        </a>
+        <a href="/category/cleaning.html" class="cat-card" style="text-decoration:none;color:inherit;">
+            <h3>🧹 Cleaning</h3>
+            <p>Residential and commercial cleaning services.</p>
+            <span class="count">16 listings</span>
+        </a>
+        <a href="/category/roofing.html" class="cat-card" style="text-decoration:none;color:inherit;">
+            <h3>🏠 Roofing</h3>
+            <p>Roof repair, replacement, and inspection.</p>
+            <span class="count">18 listings</span>
+        </a>
+        <a href="/category/painting.html" class="cat-card" style="text-decoration:none;color:inherit;">
+            <h3>🎨 Painting</h3>
+            <p>Interior and exterior painting professionals.</p>
+            <span class="count">14 listings</span>
+        </a>
+    </div>
+
+    <h2 class="section-title">Coming Soon</h2>
+    <div class="categories">
+        <div class="cat-card"><h3>🚗 Auto Repair</h3><p>Local mechanics and auto shops.</p><span class="count">Coming Soon</span></div>
+        <div class="cat-card"><h3>🛠️ Handyman Services</h3><p>General repairs and home improvement.</p><span class="count">Coming Soon</span></div>
+        <div class="cat-card"><h3>💼 Accounting &amp; Tax</h3><p>CPAs and bookkeepers for local businesses.</p><span class="count">Coming Soon</span></div>
+        <div class="cat-card"><h3>📱 Phone &amp; Voice Systems</h3><p>VoIP, business phone, and communication setup.</p><span class="count">Coming Soon</span></div>
+        <div class="cat-card"><h3>🤖 AI &amp; Automation</h3><p>AI integration and workflow automation for small business.</p><span class="count">Coming Soon</span></div>
+        <div class="cat-card"><h3>🚚 Moving Services</h3><p>Local and long-distance movers.</p><span class="count">Coming Soon</span></div>
+    </div>
+
+    <div class="cta-section">
+        <h2>List Your Business Free</h2>
+        <p>Get found by customers across Northern New Jersey. No cost, no catch.</p>
+        <a href="/contact.html">Submit Your Listing</a>
+    </div>
+
+</div>
+
+<div class="ad-banner">
+    <div class="ad-label">Advertisement</div>
+    <div class="ad-cta">Your Ad Here</div>
+    <a class="ad-link" href="/contact.html">Advertise on North NJ Services &rarr;</a>
+</div>
+
+<div class="footer">
+    <p>&copy; 2026 North NJ Services &mdash; Northern New Jersey Local Business Directory</p>
+    <p style="margin-top:.5rem;"><a href="/contact.html">Contact Us</a> &bull; <a href="https://northnjservices.com">northnjservices.com</a></p>
+</div>
+
+</body>
+</html>
