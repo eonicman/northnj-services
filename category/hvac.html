@@ -84,6 +84,260 @@
             .business-list { grid-template-columns: 1fr; }
         }
     </style>
+<style>
+/* ===== FLOATING DIY BUTTON ===== */
+.diy-float-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 999;
+    background: linear-gradient(135deg, #e94560, #c23152);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 14px 24px;
+    font-size: .95rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(233,69,96,.4);
+    transition: all .3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: inherit;
+}
+.diy-float-btn:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 6px 24px rgba(233,69,96,.5);
+}
+.diy-float-btn:active {
+    transform: scale(.95);
+}
+.diy-float-btn .icon {
+    font-size: 1.2rem;
+}
+/* Pulse animation to draw attention */
+@keyframes diyPulse {
+    0%, 100% { box-shadow: 0 4px 16px rgba(233,69,96,.4); }
+    50% { box-shadow: 0 4px 24px rgba(233,69,96,.7); }
+}
+.diy-float-btn.pulse {
+    animation: diyPulse 2s infinite;
+}
+
+/* ===== CUSTOM REQUEST MODAL ===== */
+.diy-modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,.6);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+.diy-modal-overlay.open {
+    display: flex;
+}
+.diy-modal {
+    background: #fff;
+    border-radius: 12px;
+    max-width: 480px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,.3);
+    animation: diyModalIn .3s ease;
+}
+@keyframes diyModalIn {
+    from { opacity: 0; transform: translateY(20px) scale(.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+.diy-modal-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.diy-modal-header h3 {
+    font-size: 1.1rem;
+    color: #1a1a2e;
+    margin: 0;
+}
+.diy-modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #888;
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all .2s;
+}
+.diy-modal-close:hover {
+    background: #f8f9fa;
+    color: #1a1a2e;
+}
+.diy-modal-body {
+    padding: 1.25rem 1.5rem;
+}
+.diy-modal-body p {
+    font-size: .88rem;
+    color: #555;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+.diy-form-group {
+    margin-bottom: 1rem;
+}
+.diy-form-group label {
+    display: block;
+    font-size: .82rem;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin-bottom: .4rem;
+}
+.diy-form-group input,
+.diy-form-group textarea,
+.diy-form-group select {
+    width: 100%;
+    padding: .6rem .8rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: .9rem;
+    font-family: inherit;
+    transition: border-color .2s;
+}
+.diy-form-group input:focus,
+.diy-form-group textarea:focus,
+.diy-form-group select:focus {
+    outline: none;
+    border-color: #0f3460;
+    box-shadow: 0 0 0 3px rgba(15,52,96,.1);
+}
+.diy-form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+.diy-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .75rem;
+}
+.diy-modal-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #f0f0f0;
+    display: flex;
+    gap: .5rem;
+    justify-content: flex-end;
+}
+.diy-modal-footer .diy-btn {
+    padding: .5rem 1.2rem;
+}
+
+/* Success state */
+.diy-success {
+    text-align: center;
+    padding: 2rem 1rem;
+}
+.diy-success .emoji {
+    font-size: 3rem;
+    margin-bottom: .5rem;
+}
+.diy-success h4 {
+    font-size: 1.1rem;
+    color: #1a1a2e;
+    margin-bottom: .5rem;
+}
+.diy-success p {
+    font-size: .88rem;
+    color: #555;
+    margin-bottom: 1rem;
+}
+
+/* ===== CUSTOM GUIDE RESULT ===== */
+.diy-custom-guide {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1.25rem;
+    margin-top: 1rem;
+    border-left: 3px solid #0f3460;
+}
+.diy-custom-guide h4 {
+    font-size: 1rem;
+    color: #1a1a2e;
+    margin-bottom: .5rem;
+}
+.diy-custom-guide .ai-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #0f3460, #1a1a2e);
+    color: #fff;
+    font-size: .7rem;
+    padding: .2rem .5rem;
+    border-radius: 4px;
+    margin-bottom: .75rem;
+}
+
+@media (max-width: 480px) {
+    .diy-float-btn {
+        bottom: 16px;
+        right: 16px;
+        padding: 12px 18px;
+        font-size: .85rem;
+    }
+    .diy-form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Collapsible Guide Cards */
+.diy-card {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.diy-card.collapsed .diy-card-body,
+.diy-card.collapsed .diy-expand {
+    display: none;
+}
+
+.diy-card.collapsed {
+    padding-bottom: 1rem;
+}
+
+.diy-card-header {
+    pointer-events: none; /* Let click pass through to card */
+}
+
+.diy-card-header .expand-icon {
+    margin-left: auto;
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+    pointer-events: none;
+}
+
+.diy-card.collapsed .expand-icon {
+    transform: rotate(0deg);
+}
+
+.diy-card:not(.collapsed) .expand-icon {
+    transform: rotate(180deg);
+}
+
+.diy-card-actions {
+    pointer-events: auto; /* Re-enable clicks on buttons */
+}
+</style>
 </head>
 <body>
 
@@ -389,31 +643,1345 @@
             </div>
     </div>
 
-    <div class="other-cats">
-        <h3>Browse Other Categories</h3>
-        <div class="cat-links">
-            <a href="/category/plumbing.html" class="cat-link">🔧 Plumbing</a>
-            <a href="/category/electrical.html" class="cat-link">⚡ Electrical</a>
-            <a href="/category/landscaping.html" class="cat-link">🌿 Landscaping</a>
-            <a href="/category/computers.html" class="cat-link">💻 Computers & IT</a>
-            <a href="/category/cleaning.html" class="cat-link">🧹 Cleaning</a>
-            <a href="/category/roofing.html" class="cat-link">🏠 Roofing</a>
-            <a href="/category/painting.html" class="cat-link">🎨 Painting</a>
+    
+<!-- DIY Section -->
+<div class="diy-section">
+    <div class="diy-header">
+        <h2>🔨 Top 10 Most Popular HVAC DIY Guides <span class="diy-badge">Trending Now</span></h2>
+        <div class="diy-filter">
+            <button class="active" onclick="filterDIY('all')">All</button>
+            <button onclick="filterDIY('easy')">Easy</button>
+            <button onclick="filterDIY('medium')">Medium</button>
+            <button onclick="filterDIY('hard')">Advanced</button>
         </div>
     </div>
+    
+    <p style="font-size:.85rem;color:#888;margin-bottom:1rem;">
+        📊 These guides are ranked by popularity — the more homeowners request them, the higher they appear. 
+        <strong>Updated daily based on real requests.</strong>
+    </p>
+    
+    <div class="diy-grid" id="diy-grid">
+                <div class="diy-card" data-difficulty="easy">
+            <div class="diy-card-header">
+                <div class="diy-icon" style="background:#e0f2fe;">🌡️</div>
+                <div>
+                    <h3>Replace Your Thermostat</h3>
+                    <div class="diy-meta">
+                        <span class="diy-difficulty easy" style="color:#22c55e">● Easy</span>
+                        <span>⏱️ 30 min</span>
+                        <span>💰 $50-150</span>
+                    </div>
+                </div>
+            <span class="expand-icon">▼</span>
+            </div>
+            <div class="diy-card-body">
+                <p>Upgrade to a programmable or smart thermostat to save 10-15% on heating/cooling bills.</p>
+                <div class="diy-tools">
+                    <h4>🛠️ Tools Needed</h4>
+                    <div class="diy-tool-list">
+                        <span class="diy-tool">🔧 <a href="https://www.amazon.com/s?k=screwdriver%2Bset&tag=eonicsys-20" target="_blank" rel="nofollow sponsored">Screwdriver Set</a></span>
+                        <span class="diy-tool">⚡ <a href="https://www.amazon.com/s?k=non-contact%2Bvoltage%2Btester&tag=eonicsys-20" target="_blank" rel="nofollow sponsored">Voltage Tester</a></span>
+                        <span class="diy-tool">📋 <a href="https://www.amazon.com/s?k=wire%2Blabels&tag=eonicsys-20" target="_blank" rel="nofollow sponsored">Wire Labels</a></span>
+                        <span class="diy-tool">🔪 <a href="https://www.amazon.com/s?k=utility%2Bknife&tag=eonicsys-20" target="_blank" rel="nofollow sponsored">Utility Knife</a></span>
+                    </div>
+                </div>
+                <div class="diy-actions">
+                    <button class="diy-btn diy-btn-primary" onclick="toggleSteps(this)">
+                        📖 View Steps
+                    </button>
+                    <a href="https://www.amazon.com/s?k=programmable%2Bthermostat&tag=eonicsys-20" class="diy-btn diy-btn-secondary" target="_blank" rel="nofollow sponsored">
+                        🛒 Shop Your Thermostat
+                    </a>
+                </div>
+            </div>
+            <div class="diy-expand">
+                <div class="diy-steps">
+                    <div class="warning">
+                        <strong>⚠️ Safety First:</strong> Turn off power to your HVAC system at the breaker before starting. Verify with a non-contact voltage tester.
+                    </div>
+                    
+            <div class="step-row" style="display:flex;align-items:flex-start;gap:.75rem;padding:.5rem 0;border-bottom:1px solid #f0f0f0;">
+                <div class="step-icon-box" style="width:50px;height:50px;min-width:50px;background:#f8f9fa;border-radius:8px;display:flex;align-items:center;justify-content:center;border:1px solid #e0e0e0;">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:32px;height:32px;">
+            <circle cx="45" cy="22" r="9" fill="#1a1a2e"/>
+            <rect x="38" y="31" width="14" height="22" rx="5" fill="#1a1a2e"/>
+            <path d="M32 37 L38 41" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round"/>
+            <path d="M58 37 Q66 50 54 62" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round" fill="none"/>
+            <circle cx="54" cy="64" r="3" fill="#1a1a2e"/>
+            <path d="M42 53 L38 80" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round"/>
+            <path d="M48 53 L52 80" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round"/>
+            <rect x="18" y="70" width="64" height="16" rx="3" fill="#e94560" stroke="#1a1a2e" stroke-width="1.5"/>
+            <circle cx="32" cy="78" r="2.5" fill="#fff"/>
+            <circle cx="50" cy="78" r="2.5" fill="#fff"/>
+            <circle cx="68" cy="78" r="2.5" fill="#fff"/>
+        </svg>
+                </div>
+                <div class="step-text" style="flex:1;">
+                    <div style="font-size:.72rem;color:#e94560;font-weight:700;margin-bottom:.15rem;text-transform:uppercase;letter-spacing:.5px;">Step 1</div>
+                    <strong style="color:#1a1a2e;font-size:.88rem;display:block;margin-bottom:.1rem;line-height:1.3;">Turn off power at the breaker panel.</strong>
+                    <span style="color:#888;font-size:.8rem;line-height:1.4;">Remove the old thermostat faceplate.</span>
+                </div>
+            </div>
+        
+            <div class="step-row" style="display:flex;align-items:flex-start;gap:.75rem;padding:.5rem 0;border-bottom:1px solid #f0f0f0;">
+                <div class="step-icon-box" style="width:50px;height:50px;min-width:50px;background:#f8f9fa;border-radius:8px;display:flex;align-items:center;justify-content:center;border:1px solid #e0e0e0;">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:32px;height:32px;">
+            <circle cx="45" cy="22" r="9" fill="#1a1a2e"/>
+            <rect x="38" y="31" width="14" height="22" rx="5" fill="#1a1a2e"/>
+            <path d="M32 37 Q26 48 28 58" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round" fill="none"/>
+            <path d="M58 37 Q64 45 62 52" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round" fill="none"/>
+            <circle cx="28" cy="60" r="3" fill="#1a1a2e"/>
+            <path d="M42 53 L38 80" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round"/>
+            <path d="M48 53 L52 80" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round"/>
+            <line x1="25" y1="52" x2="25" y2="74" stroke="#e94560" stroke-width="2"/>
+            <line x1="42" y1="52" x2="42" y2="74" stroke="#0f3460" stroke-width="2"/>
+            <line x1="59" y1="52" x2="59" y2="74" stroke="#22c55e" stroke-width="2"/>
+            <text x="22" y="72" font-size="8" fill="#e94560" font-family="Arial" font-weight="bold">R</text>
+            <text x="39" y="72" font-size="8" fill="#0f3460" font-family="Arial" font-weight="bold">W</text>
+            <text x="56" y="72" font-size="8" fill="#22c55e" font-family="Arial" font-weight="bold">Y</text>
+        </svg>
+                </div>
+                <div class="step-text" style="flex:1;">
+                    <div style="font-size:.72rem;color:#e94560;font-weight:700;margin-bottom:.15rem;text-transform:uppercase;letter-spacing:.5px;">Step 2</div>
+                    <strong style="color:#1a1a2e;font-size:.88rem;display:block;margin-bottom:.1rem;line-height:1.3;">Label wires with the provided stickers.</strong>
+                    <span style="color:#888;font-size:.8rem;line-height:1.4;">R, W, Y, G, C — before disconnecting.</span>
+                </div>
+            </div>
+        
+            <div class="step-row" style="display:flex;align-items:flex-start;gap:.75rem;padding:.5rem 0;border-bottom:1px solid #f0f0f0;">
+                <div class="step-icon-box" style="width:50px;height:50px;min-width:50px;background:#f8f9fa;border-radius:8px;display:flex;align-items:center;justify-content:center;border:1px solid #e0e0e0;">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:32px;height:32px;">
+            <rect x="55" y="28" width="26" height="11" rx="2" fill="#ddd" stroke="#999" stroke-width="1.5"/>
+            <circle cx="76" cy="33" r="3" fill="#888"/>
+            <circle cx="40" cy="22" r="9" fill="#1a1a2e"/>
+            <rect x="33" y="31" width="14" height="22" rx="5" fill="#1a1a2e"/>
+            <path d="M33 37 Q28 48 30 58" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round" fill="none"/>
+            <path d="M47 37 Q60 45 65 38" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round" fill="none"/>
+            <circle cx="65" cy="36" r="3" fill="#1a1a2e"/>
+            <path d="M37 53 L33 80" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round"/>
+            <path d="M43 53 L47 80" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round"/>
+            <rect x="65" y="20" width="4" height="14" rx="1" fill="#666"/>
+            <rect x="63" y="17" width="8" height="5" rx="2" fill="#e94560"/>
+        </svg>
+                </div>
+                <div class="step-text" style="flex:1;">
+                    <div style="font-size:.72rem;color:#e94560;font-weight:700;margin-bottom:.15rem;text-transform:uppercase;letter-spacing:.5px;">Step 3</div>
+                    <strong style="color:#1a1a2e;font-size:.88rem;display:block;margin-bottom:.1rem;line-height:1.3;">Remove the old base by unscrewing from the wall.</strong>
+                    <span style="color:#888;font-size:.8rem;line-height:1.4;">Keep screws if reusing.</span>
+                </div>
+            </div>
+        
+            <div class="step-row" style="display:flex;align-items:flex-start;gap:.75rem;padding:.5rem 0;border-bottom:1px solid #f0f0f0;">
+                <div class="step-icon-box" style="width:50px;height:50px;min-width:50px;background:#f8f9fa;border-radius:8px;display:flex;align-items:center;justify-content:center;border:1px solid #e0e0e0;">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:32px;height:32px;">
+            <rect x="22" y="55" width="56" height="26" rx="4" fill="#f8f9fa" stroke="#0f3460" stroke-width="2"/>
+            <line x1="28" y1="68" x2="72" y2="68" stroke="#e94560" stroke-width="1.5" stroke-dasharray="4,2"/>
+            <text x="40" y="65" font-size="6" fill="#888" font-family="Arial" font-weight="600">LEVEL</text>
+            <circle cx="45" cy="22" r="9" fill="#1a1a2e"/>
+            <rect x="38" y="31" width="14" height="22" rx="5" fill="#1a1a2e"/>
+            <path d="M32 37 Q28 48 30 56" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round" fill="none"/>
+            <path d="M58 37 Q64 48 58 58" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round" fill="none"/>
+            <circle cx="58" cy="60" r="3" fill="#1a1a2e"/>
+            <path d="M42 53 L38 80" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round"/>
+            <path d="M48 53 L52 80" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+                </div>
+                <div class="step-text" style="flex:1;">
+                    <div style="font-size:.72rem;color:#e94560;font-weight:700;margin-bottom:.15rem;text-transform:uppercase;letter-spacing:.5px;">Step 4</div>
+                    <strong style="color:#1a1a2e;font-size:.88rem;display:block;margin-bottom:.1rem;line-height:1.3;">Install new base — use a level to ensure it's straight.</strong>
+                    <span style="color:#888;font-size:.8rem;line-height:1.4;">Drill new holes if needed.</span>
+                </div>
+            </div>
+        
+            <div class="step-row" style="display:flex;align-items:flex-start;gap:.75rem;padding:.5rem 0;border-bottom:1px solid #f0f0f0;">
+                <div class="step-icon-box" style="width:50px;height:50px;min-width:50px;background:#f8f9fa;border-radius:8px;display:flex;align-items:center;justify-content:center;border:1px solid #e0e0e0;">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:32px;height:32px;">
+            <rect x="20" y="55" width="60" height="22" rx="3" fill="#f0f0f0" stroke="#999" stroke-width="1.5"/>
+            <circle cx="32" cy="64" r="4" fill="#e94560"/>
+            <circle cx="48" cy="64" r="4" fill="#0f3460"/>
+            <circle cx="64" cy="64" r="4" fill="#22c55e"/>
+            <line x1="32" y1="55" x2="32" y2="48" stroke="#e94560" stroke-width="1.5"/>
+            <line x1="48" y1="55" x2="48" y2="50" stroke="#0f3460" stroke-width="1.5"/>
+            <line x1="64" y1="55" x2="64" y2="48" stroke="#22c55e" stroke-width="1.5"/>
+            <circle cx="45" cy="22" r="9" fill="#1a1a2e"/>
+            <rect x="38" y="31" width="14" height="22" rx="5" fill="#1a1a2e"/>
+            <path d="M32 37 Q24 50 28 58" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round" fill="none"/>
+            <path d="M58 37 Q62 48 58 54" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round" fill="none"/>
+            <circle cx="28" cy="60" r="3" fill="#1a1a2e"/>
+            <path d="M42 53 L38 80" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round"/>
+            <path d="M48 53 L52 80" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+                </div>
+                <div class="step-text" style="flex:1;">
+                    <div style="font-size:.72rem;color:#e94560;font-weight:700;margin-bottom:.15rem;text-transform:uppercase;letter-spacing:.5px;">Step 5</div>
+                    <strong style="color:#1a1a2e;font-size:.88rem;display:block;margin-bottom:.1rem;line-height:1.3;">Connect wires to matching terminals.</strong>
+                    <span style="color:#888;font-size:.8rem;line-height:1.4;">Most modern thermostats have push-in connectors.</span>
+                </div>
+            </div>
+        
+            <div class="step-row" style="display:flex;align-items:flex-start;gap:.75rem;padding:.5rem 0;border-bottom:1px solid #f0f0f0;">
+                <div class="step-icon-box" style="width:50px;height:50px;min-width:50px;background:#f8f9fa;border-radius:8px;display:flex;align-items:center;justify-content:center;border:1px solid #e0e0e0;">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:32px;height:32px;">
+            <rect x="28" y="50" width="44" height="26" rx="6" fill="#f8f9fa" stroke="#0f3460" stroke-width="2"/>
+            <rect x="40" y="58" width="20" height="12" rx="3" fill="#0f3460"/>
+            <text x="46" y="67" font-size="8" fill="#fff" font-family="Arial" font-weight="bold">72°</text>
+            <circle cx="45" cy="20" r="9" fill="#1a1a2e"/>
+            <rect x="38" y="29" width="14" height="22" rx="5" fill="#1a1a2e"/>
+            <path d="M32 35 Q28 46 30 54" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round" fill="none"/>
+            <path d="M52 35 Q66 46 63 52" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round" fill="none"/>
+            <circle cx="63" cy="54" r="3" fill="#1a1a2e"/>
+            <path d="M42 51 L38 78" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round"/>
+            <path d="M48 51 L52 78" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+                </div>
+                <div class="step-text" style="flex:1;">
+                    <div style="font-size:.72rem;color:#e94560;font-weight:700;margin-bottom:.15rem;text-transform:uppercase;letter-spacing:.5px;">Step 6</div>
+                    <strong style="color:#1a1a2e;font-size:.88rem;display:block;margin-bottom:.1rem;line-height:1.3;">Attach faceplate and power on at the breaker.</strong>
+                    <span style="color:#888;font-size:.8rem;line-height:1.4;">You should hear a click.</span>
+                </div>
+            </div>
+        
+            <div class="step-row" style="display:flex;align-items:flex-start;gap:.75rem;padding:.5rem 0;border-bottom:1px solid #f0f0f0;">
+                <div class="step-icon-box" style="width:50px;height:50px;min-width:50px;background:#f8f9fa;border-radius:8px;display:flex;align-items:center;justify-content:center;border:1px solid #e0e0e0;">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:32px;height:32px;">
+            <rect x="22" y="55" width="56" height="22" rx="3" fill="#f8f9fa" stroke="#0f3460" stroke-width="2"/>
+            <circle cx="38" cy="64" r="3" fill="#22c55e"/>
+            <text x="45" y="67" font-size="6" fill="#0f3460" font-family="Arial" font-weight="600">WiFi</text>
+            <circle cx="68" cy="64" r="3" fill="#e94560"/>
+            <circle cx="45" cy="22" r="9" fill="#1a1a2e"/>
+            <rect x="38" y="31" width="14" height="22" rx="5" fill="#1a1a2e"/>
+            <path d="M32 37 Q24 50 28 56" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round" fill="none"/>
+            <path d="M58 37 Q62 48 58 54" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round" fill="none"/>
+            <circle cx="28" cy="58" r="3" fill="#1a1a2e"/>
+            <path d="M42 53 L38 80" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round"/>
+            <path d="M48 53 L52 80" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+                </div>
+                <div class="step-text" style="flex:1;">
+                    <div style="font-size:.72rem;color:#e94560;font-weight:700;margin-bottom:.15rem;text-transform:uppercase;letter-spacing:.5px;">Step 7</div>
+                    <strong style="color:#1a1a2e;font-size:.88rem;display:block;margin-bottom:.1rem;line-height:1.3;">Configure settings — schedule, WiFi, preferences.</strong>
+                    <span style="color:#888;font-size:.8rem;line-height:1.4;">Set your temperature schedule.</span>
+                </div>
+            </div>
+                            <p style="margin-top:.75rem;font-size:.82rem;color:#888;">
+                        <strong>Tip:</strong> Take a photo of your old wiring before disconnecting — it's your safety net if you forget which wire goes where.
+                    </p>
+                </div>
+            </div>
+        </div>
 
-    <div class="cta-section">
-        <h2>List Your HVAC Business Free</h2>
-        <p>Get found by customers across Northern New Jersey. No cost, no catch.</p>
-        <a href="/contact.html">Submit Your Listing</a>
+        <div class="diy-card" data-difficulty="easy">
+            <div class="diy-card-header">
+                <div class="diy-icon" style="background:#e0f2fe;">🌬️</div>
+                <div>
+                    <h3>Change Your HVAC Air Filter</h3>
+                    <div class="diy-meta">
+                        <span class="diy-difficulty easy" style="color:#22c55e">● Easy</span>
+                        <span>⏱️ 5 min</span>
+                        <span>💰 $10-40</span>
+                    </div>
+                </div>
+            <span class="expand-icon">▼</span>
+            </div>
+            <div class="diy-card-body">
+                <p>A clean filter improves air quality, reduces energy bills by 5-15%, and extends system life. Do this monthly during peak seasons.</p>
+                <div class="diy-tools">
+                    <h4>🛠️ Tools Needed</h4>
+                    <div class="diy-tool-list">
+                        <span class="diy-tool">🌬️ <a href="https://www.amazon.com/s?k=hvac%2Bair%2Bfilter%2B20x25x1&tag=eonicsys-20" target="_blank" rel="nofollow sponsored">New Filter (correct size)</a></span>
+                        <span class="diy-tool">🔦 <a href="https://www.amazon.com/s?k=led%2Bflashlight&tag=eonicsys-20" target="_blank" rel="nofollow sponsored">Flashlight</a></span>
+                    </div>
+                </div>
+                <div class="diy-actions">
+                    <button class="diy-btn diy-btn-primary" onclick="toggleSteps(this)">
+                        📖 View Steps
+                    </button>
+                    <a href="https://www.amazon.com/s?k=hvac%2Bair%2Bfilter&tag=eonicsys-20" class="diy-btn diy-btn-secondary" target="_blank" rel="nofollow sponsored">
+                        🛒 Shop Air Filter
+                    </a>
+                </div>
+            </div>
+            <div class="diy-expand">
+                <div class="diy-steps">
+                    <div class="warning">
+                        <strong>⚠️ Safety First:</strong> Never run your system without a filter — dust will damage the blower motor.
+                    </div>
+                    <ol>
+                        <li><strong>Locate your filter — usually in the return air duct, blower compartment, or behind a grille in a hallway.</strong> </li>
+                        <li><strong>Note the arrow direction on the old filter (air flow direction) before removing.</strong> </li>
+                        <li><strong>Check the size printed on the filter frame (e.</strong> g., 20x25x1).</li>
+                        <li><strong>Slide out the old filter and dispose.</strong> </li>
+                        <li><strong>Insert new filter with arrows pointing TOWARD the blower motor / furnace.</strong> </li>
+                        <li><strong>Mark your calendar for the next change — monthly in summer/winter, every 2-3 months in spring/fall.</strong> </li>
+                    </ol>
+                    <p style="margin-top:.75rem;font-size:.82rem;color:#888;">
+                        <strong>Tip:</strong> Filter size is printed on the cardboard frame (e.g., 20x25x1). Most common sizes: 20x25x1, 16x20x1, 20x20x1. Can't find it? Check the model number plate on your furnace — the manual lists the correct filter size.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="diy-card" data-difficulty="medium">
+            <div class="diy-card-header">
+                <div class="diy-icon" style="background:#e0f2fe;">❄️</div>
+                <div>
+                    <h3>Clean Your AC Condenser Coils</h3>
+                    <div class="diy-meta">
+                        <span class="diy-difficulty medium" style="color:#f59e0b">● Medium</span>
+                        <span>⏱️ 45 min</span>
+                        <span>💰 $15-30</span>
+                    </div>
+                </div>
+            <span class="expand-icon">▼</span>
+            </div>
+            <div class="diy-card-body">
+                <p>Dirty coils reduce efficiency by up to 30%. Annual cleaning keeps your AC running strong and prevents costly compressor damage.</p>
+                <div class="diy-tools">
+                    <h4>🛠️ Tools Needed</h4>
+                    <div class="diy-tool-list">
+                        <span class="diy-tool">🔧 <a href="https://www.amazon.com/s?k=ac%2Bfin%2Bcomb&tag=eonicsys-20" target="_blank" rel="nofollow sponsored">Fin Comb</a></span>
+                        <span class="diy-tool">🧴 <a href="https://www.amazon.com/s?k=ac%2Bcondenser%2Bcleaner%2Bfoam&tag=eonicsys-20" target="_blank" rel="nofollow sponsored">Foaming Cleaner</a></span>
+                        <span class="diy-tool">🚿 <a href="https://www.amazon.com/s?k=garden%2Bhose%2Bnozzle&tag=eonicsys-20" target="_blank" rel="nofollow sponsored">Garden Hose</a></span>
+                        <span class="diy-tool">🔧 <a href="https://www.amazon.com/s?k=screwdriver%2Bset&tag=eonicsys-20" target="_blank" rel="nofollow sponsored">Screwdriver</a></span>
+                        <span class="diy-tool">🧤 <a href="https://www.amazon.com/s?k=work%2Bgloves&tag=eonicsys-20" target="_blank" rel="nofollow sponsored">Work Gloves</a></span>
+                    </div>
+                </div>
+                <div class="diy-actions">
+                    <button class="diy-btn diy-btn-primary" onclick="toggleSteps(this)">
+                        📖 View Steps
+                    </button>
+                    <a href="https://www.amazon.com/s?k=ac%2Bcondenser%2Bcleaning%2Bkit&tag=eonicsys-20" class="diy-btn diy-btn-secondary" target="_blank" rel="nofollow sponsored">
+                        🛒 Shop Condenser Coils
+                    </a>
+                </div>
+            </div>
+            <div class="diy-expand">
+                <div class="diy-steps">
+                    <div class="warning">
+                        <strong>⚠️ Safety First:</strong> Never use a pressure washer — it will bend and damage the delicate aluminum fins.
+                    </div>
+                    <ol>
+                        <li><strong>Turn off power to the outdoor unit at the disconnect box (usually a lever near the condenser).</strong> </li>
+                        <li><strong>Remove the top grill/cage — typically 4-6 screws.</strong> Be careful not to damage wiring.</li>
+                        <li><strong>Inspect coils for bent fins.</strong> Straighten with a fin comb by matching the fin spacing (8-24 fins per inch).</li>
+                        <li><strong>Spray foaming cleaner generously on the coils.</strong> Let it sit 10-15 minutes.</li>
+                        <li><strong>Rinse with gentle water pressure from inside out — spray through the coils toward the outside.</strong> </li>
+                        <li><strong>Reassemble the cage and restore power.</strong> Allow 24 hours before evaluating performance improvement.</li>
+                    </ol>
+                    <p style="margin-top:.75rem;font-size:.82rem;color:#888;">
+                        <strong>Tip:</strong> Do this in spring before the first heat wave, when HVAC techs are less busy if you need help.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="diy-card" data-difficulty="medium">
+            <div class="diy-card-header">
+                <div class="diy-icon" style="background:#e0f2fe;">🌪️</div>
+                <div>
+                    <h3>Seal Leaky Air Ducts</h3>
+                    <div class="diy-meta">
+                        <span class="diy-difficulty medium" style="color:#f59e0b">● Medium</span>
+                        <span>⏱️ 2-3 hours</span>
+                        <span>💰 $25-60</span>
+                    </div>
+                </div>
+            <span class="expand-icon">▼</span>
+            </div>
+            <div class="diy-card-body">
+                <p>Leaky ducts waste 20-30% of conditioned air. Sealing them yourself pays for itself in one season through lower energy bills.</p>
+                <div class="diy-tools">
+                    <h4>🛠️ Tools Needed</h4>
+                    <div class="diy-tool-list">
+                        <span class="diy-tool">🧴 <a href="https://www.amazon.com/s?k=hvac%2Bmastic%2Bsealant&tag=eonicsys-20" target="_blank" rel="nofollow sponsored">Mastic Sealant</a></span>
+                        <span class="diy-tool">📎 <a href="https://www.amazon.com/s?k=hvac%2Bfoil%2Btape%2Bul181&tag=eonicsys-20" target="_blank" rel="nofollow sponsored">Foil Tape (UL181)</a></span>
+                        <span class="diy-tool">🔦 <a href="https://www.amazon.com/s?k=headlamp%2Bled&tag=eonicsys-20" target="_blank" rel="nofollow sponsored">Flashlight</a></span>
+                        <span class="diy-tool">🧤 <a href="https://www.amazon.com/s?k=work%2Bgloves&tag=eonicsys-20" target="_blank" rel="nofollow sponsored">Work Gloves</a></span>
+                        <span class="diy-tool">😷 <a href="https://www.amazon.com/s?k=n95%2Bdust%2Bmask&tag=eonicsys-20" target="_blank" rel="nofollow sponsored">Dust Mask</a></span>
+                    </div>
+                </div>
+                <div class="diy-actions">
+                    <button class="diy-btn diy-btn-primary" onclick="toggleSteps(this)">
+                        📖 View Steps
+                    </button>
+                    <a href="https://www.amazon.com/s?k=hvac%2Bduct%2Bsealing%2Bkit&tag=eonicsys-20" class="diy-btn diy-btn-secondary" target="_blank" rel="nofollow sponsored">
+                        🛒 Shop Air Ducts
+                    </a>
+                </div>
+            </div>
+            <div class="diy-expand">
+                <div class="diy-steps">
+                    <div class="warning">
+                        <strong>⚠️ Safety First:</strong> Do NOT use standard gray duct tape — it dries out and fails within a year. Use mastic or UL181 foil tape only.
+                    </div>
+                    <ol>
+                        <li><strong>Inspect accessible ductwork in basement, attic, or crawlspace.</strong> Look for gaps at joints, seams, and connections.</li>
+                        <li><strong>Feel for air leaks while the system is running — a smoke pencil or incense stick makes leaks visible.</strong> </li>
+                        <li><strong>Clean the area around leaks with a dry cloth so sealant will adhere.</strong> </li>
+                        <li><strong>For small gaps (under 1/4"):</strong> Apply foil tape (UL181-rated, not regular duct tape which degrades).</li>
+                        <li><strong>For larger gaps:</strong> Apply mastic sealant with a disposable brush — it's like thick paint that hardens permanently.</li>
+                        <li><strong>Seal all register boots where ducts meet floor/wall/ceiling boots.</strong> </li>
+                        <li><strong>Insulate ducts in unconditioned spaces (attic, crawlspace) with R-6 or higher duct insulation.</strong> </li>
+                    </ol>
+                    <p style="margin-top:.75rem;font-size:.82rem;color:#888;">
+                        <strong>Tip:</strong> Focus on the supply ducts (blowing air into rooms) first — return duct leaks are less critical for efficiency.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="diy-card" data-difficulty="easy">
+            <div class="diy-card-header">
+                <div class="diy-icon" style="background:#e0f2fe;">🌡️</div>
+                <div>
+                    <h3>Balance Room Temperatures</h3>
+                    <div class="diy-meta">
+                        <span class="diy-difficulty easy" style="color:#22c55e">● Easy</span>
+                        <span>⏱️ 20 min</span>
+                        <span>💰 $0</span>
+                    </div>
+                </div>
+            <span class="expand-icon">▼</span>
+            </div>
+            <div class="diy-card-body">
+                <p>Rooms too hot or cold? Most imbalances are caused by closed vents, blocked returns, or incorrect dampers — all fixable without a service call.</p>
+                <div class="diy-tools">
+                    <h4>🛠️ Tools Needed</h4>
+                    <div class="diy-tool-list">
+                        <span class="diy-tool">🌡️ <a href="https://www.amazon.com/s?k=infrared%2Bthermometer%2Bgun&tag=eonicsys-20" target="_blank" rel="nofollow sponsored">Infrared Thermometer</a></span>
+                        <span class="diy-tool">🪜 <a href="https://www.amazon.com/s?k=folding%2Bstep%2Bstool&tag=eonicsys-20" target="_blank" rel="nofollow sponsored">Step Stool</a></span>
+                    </div>
+                </div>
+                <div class="diy-actions">
+                    <button class="diy-btn diy-btn-primary" onclick="toggleSteps(this)">
+                        📖 View Steps
+                    </button>
+                    <a href="https://www.amazon.com/s?k=hvac%2Bvent%2Bdeflector&tag=eonicsys-20" class="diy-btn diy-btn-secondary" target="_blank" rel="nofollow sponsored">
+                        🛒 Shop Room Temperatures
+                    </a>
+                </div>
+            </div>
+            <div class="diy-expand">
+                <div class="diy-steps">
+                    <div class="warning">
+                        <strong>⚠️ Safety First:</strong> Never close more than 20% of your vents — it creates back-pressure that strains the blower motor.
+                    </div>
+                    <ol>
+                        <li><strong>Check that all supply vents are fully open, especially in the room that's too hot/cold.</strong> </li>
+                        <li><strong>Ensure return air grilles aren't blocked by furniture, curtains, or rugs.</strong> </li>
+                        <li><strong>Partially close (not fully block) vents in rooms that are too comfortable — this redirects airflow.</strong> </li>
+                        <li><strong>Check for manual dampers in the basement on duct branches — they look like round handles on the ductwork.</strong> </li>
+                        <li><strong>Adjust dampers seasonally:</strong> more airflow upstairs in summer (heat rises), more downstairs in winter.</li>
+                        <li><strong>If one room is still off by 5+ degrees, you may have a duct leak or insulation issue — time to call a pro.</strong> </li>
+                    </ol>
+                    <p style="margin-top:.75rem;font-size:.82rem;color:#888;">
+                        <strong>Tip:</strong> In summer, close basement vents 50% — basements are naturally cooler and need less AC.
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
+    
 
+    </div>
+    
+    
+        <!-- clean-condenser -->
+        <div class="diy-card collapsed" data-difficulty="beginner">
+            <div class="diy-header" onclick="toggleCard(this.parentElement)">
+                <div class="diy-icon">🧹</div>
+                <div class="diy-title">
+                    <h3>Clean Your AC Condenser Coils</h3>
+                    <div class="diy-meta">
+                        <span class="diy-badge difficulty-beginner">beginner</span>
+                        <span>⏱️ 30 minutes</span>
+                        <span>💰 $0</span>
+                    </div>
+                </div>
+                <button class="diy-btn diy-btn-primary" style="margin-left:auto;font-size:.8rem;padding:.4rem .8rem;" onclick="event.stopPropagation();toggleCard(this.closest('.diy-card'))">
+                    📖 Read Guide
+                </button>
+            </div>
+            <div class="diy-expand">
+                <div class="diy-content">
+                    <p><strong>Dirty condenser coils reduce AC efficiency by up to 30%. Clean them yourself with a hose and fin comb.</strong></p>
+                    
+                    <h4 style="margin-top:1rem;color:#1a1a2e;">🛠️ Tools You'll Need</h4>
+                    <ul style="list-style:none;padding:0;margin:.5rem 0;">
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🚿 Garden Hose</a></li>
+        <li><a href="https://www.amazon.com/s?k=fin+comb+ac" target="_blank" style="color:#1a1a2e;text-decoration:none;font-weight:600;">🔧 Fin Comb <span style="color:#e94560;font-size:.8rem;">$8-12</span></a></li>
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🔫 Spray Nozzle</a></li>
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🪛 Screwdriver</a></li>
+                    </ul>
+                </div>
+                
+                <div class="diy-steps">
+                    <div class="warning">
+                        <strong>⚠️ Safety First:</strong> Never use a pressure washer — the high pressure will flatten the delicate aluminum fins permanently.
+                    </div>
+                    <ol>
+            <li>🚫 Turn OFF power to the outdoor unit at the breaker and disconnect box.</li>
+            <li>🔩 Remove the top grille or side panels to access the coils (usually 4-6 screws).</li>
+            <li>🧹 Brush away leaves, grass clippings, and debris from around the unit.</li>
+            <li>🚿 Spray coils from INSIDE out (not outside in) with moderate water pressure.</li>
+            <li>🧹 Straighten bent fins with a fin comb — work gently, one fin at a time.</li>
+            <li>📏 Check coils monthly during heavy use; clean at start of each season.</li>
+                    </ol>
+                    <p style="margin-top:.75rem;font-size:.82rem;color:#888;">
+                        <strong>💡 Pro Tip:</strong> If you have a shop vac, use it to suck debris out from inside the unit before hosing.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- duct-inspection -->
+        <div class="diy-card collapsed" data-difficulty="intermediate">
+            <div class="diy-header" onclick="toggleCard(this.parentElement)">
+                <div class="diy-icon">🔍</div>
+                <div class="diy-title">
+                    <h3>Inspect Ductwork for Leaks</h3>
+                    <div class="diy-meta">
+                        <span class="diy-badge difficulty-intermediate">intermediate</span>
+                        <span>⏱️ 45-60 minutes</span>
+                        <span>💰 $15-30</span>
+                    </div>
+                </div>
+                <button class="diy-btn diy-btn-primary" style="margin-left:auto;font-size:.8rem;padding:.4rem .8rem;" onclick="event.stopPropagation();toggleCard(this.closest('.diy-card'))">
+                    📖 Read Guide
+                </button>
+            </div>
+            <div class="diy-expand">
+                <div class="diy-content">
+                    <p><strong>Leaky ducts waste 20-30% of heated/cooled air. Find and seal them with mastic or foil tape.</strong></p>
+                    
+                    <h4 style="margin-top:1rem;color:#1a1a2e;">🛠️ Tools You'll Need</h4>
+                    <ul style="list-style:none;padding:0;margin:.5rem 0;">
+        <li><a href="https://www.amazon.com/s?k=hvac+foil+tape" target="_blank" style="color:#1a1a2e;text-decoration:none;font-weight:600;">🎀 Foil Tape <span style="color:#e94560;font-size:.8rem;">$10-15</span></a></li>
+        <li><a href="https://www.amazon.com/s?k=duct+mastic+sealant" target="_blank" style="color:#1a1a2e;text-decoration:none;font-weight:600;">🪣 Mastic Sealant <span style="color:#e94560;font-size:.8rem;">$15-20</span></a></li>
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🔦 Flashlight</a></li>
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🌿 Incense Stick <span style="color:#e94560;font-size:.8rem;">$3</span></a></li>
+                    </ul>
+                </div>
+                
+                <div class="diy-steps">
+                    <div class="warning">
+                        <strong>⚠️ Safety First:</strong> Never use standard cloth duct tape — it fails within months. Use UL-181 rated foil tape only.
+                    </div>
+                    <ol>
+            <li>🔦 Turn on your HVAC fan (not heat or AC, just the fan) to pressurize the ducts.</li>
+            <li>🔍 Check all visible duct joints, connections, and seams in basement/crawlspace.</li>
+            <li>🌿 Hold an incense stick near joints — if smoke gets sucked in or blown away, there's a leak.</li>
+            <li>🎀 Seal small gaps (<1/4") with foil tape — press firmly, smooth all edges.</li>
+            <li>🪣 Apply mastic to larger gaps — it's messy but permanent. Wear gloves.</li>
+            <li>🔍 Check flex duct connections at boots and plenums — these are common failure points.</li>
+                    </ol>
+                    <p style="margin-top:.75rem;font-size:.82rem;color:#888;">
+                        <strong>💡 Pro Tip:</strong> If you can access your main trunk line, look for disconnected flex ducts — they often fall off over time.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- humidifier-maintenance -->
+        <div class="diy-card collapsed" data-difficulty="beginner">
+            <div class="diy-header" onclick="toggleCard(this.parentElement)">
+                <div class="diy-icon">💧</div>
+                <div class="diy-title">
+                    <h3>Maintain Your Whole-House Humidifier</h3>
+                    <div class="diy-meta">
+                        <span class="diy-badge difficulty-beginner">beginner</span>
+                        <span>⏱️ 20 minutes</span>
+                        <span>💰 $25-40</span>
+                    </div>
+                </div>
+                <button class="diy-btn diy-btn-primary" style="margin-left:auto;font-size:.8rem;padding:.4rem .8rem;" onclick="event.stopPropagation();toggleCard(this.closest('.diy-card'))">
+                    📖 Read Guide
+                </button>
+            </div>
+            <div class="diy-expand">
+                <div class="diy-content">
+                    <p><strong>A neglected humidifier breeds mold and bacteria. Clean it annually for healthy indoor air.</strong></p>
+                    
+                    <h4 style="margin-top:1rem;color:#1a1a2e;">🛠️ Tools You'll Need</h4>
+                    <ul style="list-style:none;padding:0;margin:.5rem 0;">
+        <li><a href="https://www.amazon.com/s?k=humidifier+pad" target="_blank" style="color:#1a1a2e;text-decoration:none;font-weight:600;">🧻 Humidifier Pads <span style="color:#e94560;font-size:.8rem;">$20-30</span></a></li>
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🍶 White Vinegar <span style="color:#e94560;font-size:.8rem;">$3</span></a></li>
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🖌️ Soft Brush</a></li>
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🧹 Shop Vac</a></li>
+                    </ul>
+                </div>
+                
+                <div class="diy-steps">
+                    <div class="warning">
+                        <strong>⚠️ Safety First:</strong> Never run a humidifier with a moldy pad — it will blow spores throughout your entire house.
+                    </div>
+                    <ol>
+            <li>🚫 Turn off power to the humidifier at the switch or breaker.</li>
+            <li>🔩 Open the humidifier panel — usually one or two thumb screws or latches.</li>
+            <li>🧻 Remove the old water panel/cartridge — note which direction the water flows.</li>
+            <li>🍶 Soak the distribution tray in vinegar for 10 minutes to dissolve mineral buildup.</li>
+            <li>🧹 Vacuum out any sediment or debris from the drain pan and housing.</li>
+            <li>🧻 Install the new pad with the colored dots facing UP (water flows down through it).</li>
+                    </ol>
+                    <p style="margin-top:.75rem;font-size:.82rem;color:#888;">
+                        <strong>💡 Pro Tip:</strong> Write the replacement date on the new pad with a Sharpie so you know when it's due next year.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- smart-thermostat -->
+        <div class="diy-card collapsed" data-difficulty="intermediate">
+            <div class="diy-header" onclick="toggleCard(this.parentElement)">
+                <div class="diy-icon">📱</div>
+                <div class="diy-title">
+                    <h3>Install a Smart Thermostat</h3>
+                    <div class="diy-meta">
+                        <span class="diy-badge difficulty-intermediate">intermediate</span>
+                        <span>⏱️ 45-60 minutes</span>
+                        <span>💰 $150-250</span>
+                    </div>
+                </div>
+                <button class="diy-btn diy-btn-primary" style="margin-left:auto;font-size:.8rem;padding:.4rem .8rem;" onclick="event.stopPropagation();toggleCard(this.closest('.diy-card'))">
+                    📖 Read Guide
+                </button>
+            </div>
+            <div class="diy-expand">
+                <div class="diy-content">
+                    <p><strong>Save 10-15% on energy bills with a programmable smart thermostat. Most homeowners can install it themselves.</strong></p>
+                    
+                    <h4 style="margin-top:1rem;color:#1a1a2e;">🛠️ Tools You'll Need</h4>
+                    <ul style="list-style:none;padding:0;margin:.5rem 0;">
+        <li><a href="https://www.amazon.com/s?k=smart+thermostat" target="_blank" style="color:#1a1a2e;text-decoration:none;font-weight:600;">📱 Smart Thermostat <span style="color:#e94560;font-size:.8rem;">$150-250</span></a></li>
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🪛 Screwdriver Set</a></li>
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🏷️ Wire Labels <span style="color:#e94560;font-size:.8rem;">$5</span></a></li>
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">📐 Level</a></li>
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🔩 Drill</a></li>
+                    </ul>
+                </div>
+                
+                <div class="diy-steps">
+                    <div class="warning">
+                        <strong>⚠️ Safety First:</strong> If your system has thick wires (120V line voltage) instead of thin low-voltage wires, stop and call a pro. Smart thermostats only work with 24V low-voltage systems.
+                    </div>
+                    <ol>
+            <li>🚫 Turn OFF power to your HVAC system at the breaker — this is critical for safety.</li>
+            <li>🪛 Remove the old thermostat faceplate and take a photo of the wire configuration before disconnecting.</li>
+            <li>🏷️ Label each wire with the letter code (R, W, Y, G, C, etc.) — match letters exactly.</li>
+            <li>🔩 Remove the old mounting plate and install the new base, using a level to keep it straight.</li>
+            <li>🔗 Connect wires to matching terminals on the new thermostat (R→R, W→W, etc.).</li>
+            <li>📱 Turn power back on, follow the setup wizard, and connect to WiFi for remote control.</li>
+                    </ol>
+                    <p style="margin-top:.75rem;font-size:.82rem;color:#888;">
+                        <strong>💡 Pro Tip:</strong> Most smart thermostats have a compatibility checker on their website — enter your wire letters before buying to confirm it will work with your system.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- furnace-pilot -->
+        <div class="diy-card collapsed" data-difficulty="beginner">
+            <div class="diy-header" onclick="toggleCard(this.parentElement)">
+                <div class="diy-icon">🔥</div>
+                <div class="diy-title">
+                    <h3>Relight Your Furnace Pilot Light</h3>
+                    <div class="diy-meta">
+                        <span class="diy-badge difficulty-beginner">beginner</span>
+                        <span>⏱️ 15 minutes</span>
+                        <span>💰 $0</span>
+                    </div>
+                </div>
+                <button class="diy-btn diy-btn-primary" style="margin-left:auto;font-size:.8rem;padding:.4rem .8rem;" onclick="event.stopPropagation();toggleCard(this.closest('.diy-card'))">
+                    📖 Read Guide
+                </button>
+            </div>
+            <div class="diy-expand">
+                <div class="diy-content">
+                    <p><strong>A blown-out pilot light is the #1 cause of 'no heat' calls. Relighting it yourself takes 5 minutes and saves a $150 service fee.</strong></p>
+                    
+                    <h4 style="margin-top:1rem;color:#1a1a2e;">🛠️ Tools You'll Need</h4>
+                    <ul style="list-style:none;padding:0;margin:.5rem 0;">
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🔥 Long Match or Lighter</a></li>
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🔦 Flashlight</a></li>
+                    </ul>
+                </div>
+                
+                <div class="diy-steps">
+                    <div class="warning">
+                        <strong>⚠️ Safety First:</strong> If you smell gas, do NOT attempt to light the pilot. Turn off the gas valve, leave the house, and call the gas company from outside.
+                    </div>
+                    <ol>
+            <li>🚫 Turn the gas valve to OFF and wait 5 minutes for any gas to dissipate (smell for gas first).</li>
+            <li>🔦 Find the pilot assembly — it's a small tube near the burners with a knob labeled PILOT.</li>
+            <li>🔥 Turn the knob to PILOT and press down. Hold a lit match or long lighter at the pilot opening.</li>
+            <li>🔥 Keep the knob pressed for 30-60 seconds after the pilot lights to heat the thermocouple.</li>
+            <li>🔄 Release the knob slowly — if the pilot stays lit, turn the knob to ON.</li>
+            <li>🔥 If the pilot won't stay lit after 3 tries, the thermocouple may need replacement — call a pro.</li>
+                    </ol>
+                    <p style="margin-top:.75rem;font-size:.82rem;color:#888;">
+                        <strong>💡 Pro Tip:</strong> Newer furnaces use electronic ignition (no standing pilot). If you don't see a pilot light, your furnace probably has a hot surface igniter — a different repair entirely.
+                    </p>
+                </div>
+            </div>
+        </div>
+    
+    
+        <!-- clean-condenser -->
+        <div class="diy-card collapsed" data-difficulty="beginner">
+            <div class="diy-header" onclick="toggleCard(this.parentElement)">
+                <div class="diy-icon">🧹</div>
+                <div class="diy-title">
+                    <h3>Clean Your AC Condenser Coils</h3>
+                    <div class="diy-meta">
+                        <span class="diy-badge difficulty-beginner">beginner</span>
+                        <span>⏱️ 30 minutes</span>
+                        <span>💰 $0</span>
+                    </div>
+                </div>
+                <button class="diy-btn diy-btn-primary" style="margin-left:auto;font-size:.8rem;padding:.4rem .8rem;" onclick="event.stopPropagation();toggleCard(this.closest('.diy-card'))">
+                    📖 Read Guide
+                </button>
+            </div>
+            <div class="diy-expand">
+                <div class="diy-content">
+                    <p><strong>Dirty condenser coils reduce AC efficiency by up to 30%. Clean them yourself with a hose and fin comb.</strong></p>
+                    
+                    <h4 style="margin-top:1rem;color:#1a1a2e;">🛠️ Tools You'll Need</h4>
+                    <ul style="list-style:none;padding:0;margin:.5rem 0;">
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🚿 Garden Hose</a></li>
+        <li><a href="https://www.amazon.com/s?k=fin+comb+ac" target="_blank" style="color:#1a1a2e;text-decoration:none;font-weight:600;">🔧 Fin Comb <span style="color:#e94560;font-size:.8rem;">$8-12</span></a></li>
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🔫 Spray Nozzle</a></li>
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🪛 Screwdriver</a></li>
+                    </ul>
+                </div>
+                
+                <div class="diy-steps">
+                    <div class="warning">
+                        <strong>⚠️ Safety First:</strong> Never use a pressure washer — the high pressure will flatten the delicate aluminum fins permanently.
+                    </div>
+                    <ol>
+            <li>🚫 Turn OFF power to the outdoor unit at the breaker and disconnect box.</li>
+            <li>🔩 Remove the top grille or side panels to access the coils (usually 4-6 screws).</li>
+            <li>🧹 Brush away leaves, grass clippings, and debris from around the unit.</li>
+            <li>🚿 Spray coils from INSIDE out (not outside in) with moderate water pressure.</li>
+            <li>🧹 Straighten bent fins with a fin comb — work gently, one fin at a time.</li>
+            <li>📏 Check coils monthly during heavy use; clean at start of each season.</li>
+                    </ol>
+                    <p style="margin-top:.75rem;font-size:.82rem;color:#888;">
+                        <strong>💡 Pro Tip:</strong> If you have a shop vac, use it to suck debris out from inside the unit before hosing.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- duct-inspection -->
+        <div class="diy-card collapsed" data-difficulty="intermediate">
+            <div class="diy-header" onclick="toggleCard(this.parentElement)">
+                <div class="diy-icon">🔍</div>
+                <div class="diy-title">
+                    <h3>Inspect Ductwork for Leaks</h3>
+                    <div class="diy-meta">
+                        <span class="diy-badge difficulty-intermediate">intermediate</span>
+                        <span>⏱️ 45-60 minutes</span>
+                        <span>💰 $15-30</span>
+                    </div>
+                </div>
+                <button class="diy-btn diy-btn-primary" style="margin-left:auto;font-size:.8rem;padding:.4rem .8rem;" onclick="event.stopPropagation();toggleCard(this.closest('.diy-card'))">
+                    📖 Read Guide
+                </button>
+            </div>
+            <div class="diy-expand">
+                <div class="diy-content">
+                    <p><strong>Leaky ducts waste 20-30% of heated/cooled air. Find and seal them with mastic or foil tape.</strong></p>
+                    
+                    <h4 style="margin-top:1rem;color:#1a1a2e;">🛠️ Tools You'll Need</h4>
+                    <ul style="list-style:none;padding:0;margin:.5rem 0;">
+        <li><a href="https://www.amazon.com/s?k=hvac+foil+tape" target="_blank" style="color:#1a1a2e;text-decoration:none;font-weight:600;">🎀 Foil Tape <span style="color:#e94560;font-size:.8rem;">$10-15</span></a></li>
+        <li><a href="https://www.amazon.com/s?k=duct+mastic+sealant" target="_blank" style="color:#1a1a2e;text-decoration:none;font-weight:600;">🪣 Mastic Sealant <span style="color:#e94560;font-size:.8rem;">$15-20</span></a></li>
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🔦 Flashlight</a></li>
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🌿 Incense Stick <span style="color:#e94560;font-size:.8rem;">$3</span></a></li>
+                    </ul>
+                </div>
+                
+                <div class="diy-steps">
+                    <div class="warning">
+                        <strong>⚠️ Safety First:</strong> Never use standard cloth duct tape — it fails within months. Use UL-181 rated foil tape only.
+                    </div>
+                    <ol>
+            <li>🔦 Turn on your HVAC fan (not heat or AC, just the fan) to pressurize the ducts.</li>
+            <li>🔍 Check all visible duct joints, connections, and seams in basement/crawlspace.</li>
+            <li>🌿 Hold an incense stick near joints — if smoke gets sucked in or blown away, there's a leak.</li>
+            <li>🎀 Seal small gaps (<1/4") with foil tape — press firmly, smooth all edges.</li>
+            <li>🪣 Apply mastic to larger gaps — it's messy but permanent. Wear gloves.</li>
+            <li>🔍 Check flex duct connections at boots and plenums — these are common failure points.</li>
+                    </ol>
+                    <p style="margin-top:.75rem;font-size:.82rem;color:#888;">
+                        <strong>💡 Pro Tip:</strong> If you can access your main trunk line, look for disconnected flex ducts — they often fall off over time.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- humidifier-maintenance -->
+        <div class="diy-card collapsed" data-difficulty="beginner">
+            <div class="diy-header" onclick="toggleCard(this.parentElement)">
+                <div class="diy-icon">💧</div>
+                <div class="diy-title">
+                    <h3>Maintain Your Whole-House Humidifier</h3>
+                    <div class="diy-meta">
+                        <span class="diy-badge difficulty-beginner">beginner</span>
+                        <span>⏱️ 20 minutes</span>
+                        <span>💰 $25-40</span>
+                    </div>
+                </div>
+                <button class="diy-btn diy-btn-primary" style="margin-left:auto;font-size:.8rem;padding:.4rem .8rem;" onclick="event.stopPropagation();toggleCard(this.closest('.diy-card'))">
+                    📖 Read Guide
+                </button>
+            </div>
+            <div class="diy-expand">
+                <div class="diy-content">
+                    <p><strong>A neglected humidifier breeds mold and bacteria. Clean it annually for healthy indoor air.</strong></p>
+                    
+                    <h4 style="margin-top:1rem;color:#1a1a2e;">🛠️ Tools You'll Need</h4>
+                    <ul style="list-style:none;padding:0;margin:.5rem 0;">
+        <li><a href="https://www.amazon.com/s?k=humidifier+pad" target="_blank" style="color:#1a1a2e;text-decoration:none;font-weight:600;">🧻 Humidifier Pads <span style="color:#e94560;font-size:.8rem;">$20-30</span></a></li>
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🍶 White Vinegar <span style="color:#e94560;font-size:.8rem;">$3</span></a></li>
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🖌️ Soft Brush</a></li>
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🧹 Shop Vac</a></li>
+                    </ul>
+                </div>
+                
+                <div class="diy-steps">
+                    <div class="warning">
+                        <strong>⚠️ Safety First:</strong> Never run a humidifier with a moldy pad — it will blow spores throughout your entire house.
+                    </div>
+                    <ol>
+            <li>🚫 Turn off power to the humidifier at the switch or breaker.</li>
+            <li>🔩 Open the humidifier panel — usually one or two thumb screws or latches.</li>
+            <li>🧻 Remove the old water panel/cartridge — note which direction the water flows.</li>
+            <li>🍶 Soak the distribution tray in vinegar for 10 minutes to dissolve mineral buildup.</li>
+            <li>🧹 Vacuum out any sediment or debris from the drain pan and housing.</li>
+            <li>🧻 Install the new pad with the colored dots facing UP (water flows down through it).</li>
+                    </ol>
+                    <p style="margin-top:.75rem;font-size:.82rem;color:#888;">
+                        <strong>💡 Pro Tip:</strong> Write the replacement date on the new pad with a Sharpie so you know when it's due next year.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- smart-thermostat -->
+        <div class="diy-card collapsed" data-difficulty="intermediate">
+            <div class="diy-header" onclick="toggleCard(this.parentElement)">
+                <div class="diy-icon">📱</div>
+                <div class="diy-title">
+                    <h3>Install a Smart Thermostat</h3>
+                    <div class="diy-meta">
+                        <span class="diy-badge difficulty-intermediate">intermediate</span>
+                        <span>⏱️ 45-60 minutes</span>
+                        <span>💰 $150-250</span>
+                    </div>
+                </div>
+                <button class="diy-btn diy-btn-primary" style="margin-left:auto;font-size:.8rem;padding:.4rem .8rem;" onclick="event.stopPropagation();toggleCard(this.closest('.diy-card'))">
+                    📖 Read Guide
+                </button>
+            </div>
+            <div class="diy-expand">
+                <div class="diy-content">
+                    <p><strong>Save 10-15% on energy bills with a programmable smart thermostat. Most homeowners can install it themselves.</strong></p>
+                    
+                    <h4 style="margin-top:1rem;color:#1a1a2e;">🛠️ Tools You'll Need</h4>
+                    <ul style="list-style:none;padding:0;margin:.5rem 0;">
+        <li><a href="https://www.amazon.com/s?k=smart+thermostat" target="_blank" style="color:#1a1a2e;text-decoration:none;font-weight:600;">📱 Smart Thermostat <span style="color:#e94560;font-size:.8rem;">$150-250</span></a></li>
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🪛 Screwdriver Set</a></li>
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🏷️ Wire Labels <span style="color:#e94560;font-size:.8rem;">$5</span></a></li>
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">📐 Level</a></li>
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🔩 Drill</a></li>
+                    </ul>
+                </div>
+                
+                <div class="diy-steps">
+                    <div class="warning">
+                        <strong>⚠️ Safety First:</strong> If your system has thick wires (120V line voltage) instead of thin low-voltage wires, stop and call a pro. Smart thermostats only work with 24V low-voltage systems.
+                    </div>
+                    <ol>
+            <li>🚫 Turn OFF power to your HVAC system at the breaker — this is critical for safety.</li>
+            <li>🪛 Remove the old thermostat faceplate and take a photo of the wire configuration before disconnecting.</li>
+            <li>🏷️ Label each wire with the letter code (R, W, Y, G, C, etc.) — match letters exactly.</li>
+            <li>🔩 Remove the old mounting plate and install the new base, using a level to keep it straight.</li>
+            <li>🔗 Connect wires to matching terminals on the new thermostat (R→R, W→W, etc.).</li>
+            <li>📱 Turn power back on, follow the setup wizard, and connect to WiFi for remote control.</li>
+                    </ol>
+                    <p style="margin-top:.75rem;font-size:.82rem;color:#888;">
+                        <strong>💡 Pro Tip:</strong> Most smart thermostats have a compatibility checker on their website — enter your wire letters before buying to confirm it will work with your system.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- furnace-pilot -->
+        <div class="diy-card collapsed" data-difficulty="beginner">
+            <div class="diy-header" onclick="toggleCard(this.parentElement)">
+                <div class="diy-icon">🔥</div>
+                <div class="diy-title">
+                    <h3>Relight Your Furnace Pilot Light</h3>
+                    <div class="diy-meta">
+                        <span class="diy-badge difficulty-beginner">beginner</span>
+                        <span>⏱️ 15 minutes</span>
+                        <span>💰 $0</span>
+                    </div>
+                </div>
+                <button class="diy-btn diy-btn-primary" style="margin-left:auto;font-size:.8rem;padding:.4rem .8rem;" onclick="event.stopPropagation();toggleCard(this.closest('.diy-card'))">
+                    📖 Read Guide
+                </button>
+            </div>
+            <div class="diy-expand">
+                <div class="diy-content">
+                    <p><strong>A blown-out pilot light is the #1 cause of 'no heat' calls. Relighting it yourself takes 5 minutes and saves a $150 service fee.</strong></p>
+                    
+                    <h4 style="margin-top:1rem;color:#1a1a2e;">🛠️ Tools You'll Need</h4>
+                    <ul style="list-style:none;padding:0;margin:.5rem 0;">
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🔥 Long Match or Lighter</a></li>
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🔦 Flashlight</a></li>
+                    </ul>
+                </div>
+                
+                <div class="diy-steps">
+                    <div class="warning">
+                        <strong>⚠️ Safety First:</strong> If you smell gas, do NOT attempt to light the pilot. Turn off the gas valve, leave the house, and call the gas company from outside.
+                    </div>
+                    <ol>
+            <li>🚫 Turn the gas valve to OFF and wait 5 minutes for any gas to dissipate (smell for gas first).</li>
+            <li>🔦 Find the pilot assembly — it's a small tube near the burners with a knob labeled PILOT.</li>
+            <li>🔥 Turn the knob to PILOT and press down. Hold a lit match or long lighter at the pilot opening.</li>
+            <li>🔥 Keep the knob pressed for 30-60 seconds after the pilot lights to heat the thermocouple.</li>
+            <li>🔄 Release the knob slowly — if the pilot stays lit, turn the knob to ON.</li>
+            <li>🔥 If the pilot won't stay lit after 3 tries, the thermocouple may need replacement — call a pro.</li>
+                    </ol>
+                    <p style="margin-top:.75rem;font-size:.82rem;color:#888;">
+                        <strong>💡 Pro Tip:</strong> Newer furnaces use electronic ignition (no standing pilot). If you don't see a pilot light, your furnace probably has a hot surface igniter — a different repair entirely.
+                    </p>
+                </div>
+            </div>
+        </div>
+    
+    
+        <!-- clean-condenser -->
+        <div class="diy-card collapsed" data-difficulty="beginner">
+            <div class="diy-header" onclick="toggleCard(this.parentElement)">
+                <div class="diy-icon">🧹</div>
+                <div class="diy-title">
+                    <h3>Clean Your AC Condenser Coils</h3>
+                    <div class="diy-meta">
+                        <span class="diy-badge difficulty-beginner">beginner</span>
+                        <span>⏱️ 30 minutes</span>
+                        <span>💰 $0</span>
+                    </div>
+                </div>
+                <button class="diy-btn diy-btn-primary" style="margin-left:auto;font-size:.8rem;padding:.4rem .8rem;" onclick="event.stopPropagation();toggleCard(this.closest('.diy-card'))">
+                    📖 Read Guide
+                </button>
+            </div>
+            <div class="diy-expand">
+                <div class="diy-content">
+                    <p><strong>Dirty condenser coils reduce AC efficiency by up to 30%. Clean them yourself with a hose and fin comb.</strong></p>
+                    
+                    <h4 style="margin-top:1rem;color:#1a1a2e;">🛠️ Tools You'll Need</h4>
+                    <ul style="list-style:none;padding:0;margin:.5rem 0;">
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🚿 Garden Hose</a></li>
+        <li><a href="https://www.amazon.com/s?k=fin+comb+ac" target="_blank" style="color:#1a1a2e;text-decoration:none;font-weight:600;">🔧 Fin Comb <span style="color:#e94560;font-size:.8rem;">$8-12</span></a></li>
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🔫 Spray Nozzle</a></li>
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🪛 Screwdriver</a></li>
+                    </ul>
+                </div>
+                
+                <div class="diy-steps">
+                    <div class="warning">
+                        <strong>⚠️ Safety First:</strong> Never use a pressure washer — the high pressure will flatten the delicate aluminum fins permanently.
+                    </div>
+                    <ol>
+            <li>🚫 Turn OFF power to the outdoor unit at the breaker and disconnect box.</li>
+            <li>🔩 Remove the top grille or side panels to access the coils (usually 4-6 screws).</li>
+            <li>🧹 Brush away leaves, grass clippings, and debris from around the unit.</li>
+            <li>🚿 Spray coils from INSIDE out (not outside in) with moderate water pressure.</li>
+            <li>🧹 Straighten bent fins with a fin comb — work gently, one fin at a time.</li>
+            <li>📏 Check coils monthly during heavy use; clean at start of each season.</li>
+                    </ol>
+                    <p style="margin-top:.75rem;font-size:.82rem;color:#888;">
+                        <strong>💡 Pro Tip:</strong> If you have a shop vac, use it to suck debris out from inside the unit before hosing.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- duct-inspection -->
+        <div class="diy-card collapsed" data-difficulty="intermediate">
+            <div class="diy-header" onclick="toggleCard(this.parentElement)">
+                <div class="diy-icon">🔍</div>
+                <div class="diy-title">
+                    <h3>Inspect Ductwork for Leaks</h3>
+                    <div class="diy-meta">
+                        <span class="diy-badge difficulty-intermediate">intermediate</span>
+                        <span>⏱️ 45-60 minutes</span>
+                        <span>💰 $15-30</span>
+                    </div>
+                </div>
+                <button class="diy-btn diy-btn-primary" style="margin-left:auto;font-size:.8rem;padding:.4rem .8rem;" onclick="event.stopPropagation();toggleCard(this.closest('.diy-card'))">
+                    📖 Read Guide
+                </button>
+            </div>
+            <div class="diy-expand">
+                <div class="diy-content">
+                    <p><strong>Leaky ducts waste 20-30% of heated/cooled air. Find and seal them with mastic or foil tape.</strong></p>
+                    
+                    <h4 style="margin-top:1rem;color:#1a1a2e;">🛠️ Tools You'll Need</h4>
+                    <ul style="list-style:none;padding:0;margin:.5rem 0;">
+        <li><a href="https://www.amazon.com/s?k=hvac+foil+tape" target="_blank" style="color:#1a1a2e;text-decoration:none;font-weight:600;">🎀 Foil Tape <span style="color:#e94560;font-size:.8rem;">$10-15</span></a></li>
+        <li><a href="https://www.amazon.com/s?k=duct+mastic+sealant" target="_blank" style="color:#1a1a2e;text-decoration:none;font-weight:600;">🪣 Mastic Sealant <span style="color:#e94560;font-size:.8rem;">$15-20</span></a></li>
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🔦 Flashlight</a></li>
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🌿 Incense Stick <span style="color:#e94560;font-size:.8rem;">$3</span></a></li>
+                    </ul>
+                </div>
+                
+                <div class="diy-steps">
+                    <div class="warning">
+                        <strong>⚠️ Safety First:</strong> Never use standard cloth duct tape — it fails within months. Use UL-181 rated foil tape only.
+                    </div>
+                    <ol>
+            <li>🔦 Turn on your HVAC fan (not heat or AC, just the fan) to pressurize the ducts.</li>
+            <li>🔍 Check all visible duct joints, connections, and seams in basement/crawlspace.</li>
+            <li>🌿 Hold an incense stick near joints — if smoke gets sucked in or blown away, there's a leak.</li>
+            <li>🎀 Seal small gaps (<1/4") with foil tape — press firmly, smooth all edges.</li>
+            <li>🪣 Apply mastic to larger gaps — it's messy but permanent. Wear gloves.</li>
+            <li>🔍 Check flex duct connections at boots and plenums — these are common failure points.</li>
+                    </ol>
+                    <p style="margin-top:.75rem;font-size:.82rem;color:#888;">
+                        <strong>💡 Pro Tip:</strong> If you can access your main trunk line, look for disconnected flex ducts — they often fall off over time.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- humidifier-maintenance -->
+        <div class="diy-card collapsed" data-difficulty="beginner">
+            <div class="diy-header" onclick="toggleCard(this.parentElement)">
+                <div class="diy-icon">💧</div>
+                <div class="diy-title">
+                    <h3>Maintain Your Whole-House Humidifier</h3>
+                    <div class="diy-meta">
+                        <span class="diy-badge difficulty-beginner">beginner</span>
+                        <span>⏱️ 20 minutes</span>
+                        <span>💰 $25-40</span>
+                    </div>
+                </div>
+                <button class="diy-btn diy-btn-primary" style="margin-left:auto;font-size:.8rem;padding:.4rem .8rem;" onclick="event.stopPropagation();toggleCard(this.closest('.diy-card'))">
+                    📖 Read Guide
+                </button>
+            </div>
+            <div class="diy-expand">
+                <div class="diy-content">
+                    <p><strong>A neglected humidifier breeds mold and bacteria. Clean it annually for healthy indoor air.</strong></p>
+                    
+                    <h4 style="margin-top:1rem;color:#1a1a2e;">🛠️ Tools You'll Need</h4>
+                    <ul style="list-style:none;padding:0;margin:.5rem 0;">
+        <li><a href="https://www.amazon.com/s?k=humidifier+pad" target="_blank" style="color:#1a1a2e;text-decoration:none;font-weight:600;">🧻 Humidifier Pads <span style="color:#e94560;font-size:.8rem;">$20-30</span></a></li>
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🍶 White Vinegar <span style="color:#e94560;font-size:.8rem;">$3</span></a></li>
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🖌️ Soft Brush</a></li>
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🧹 Shop Vac</a></li>
+                    </ul>
+                </div>
+                
+                <div class="diy-steps">
+                    <div class="warning">
+                        <strong>⚠️ Safety First:</strong> Never run a humidifier with a moldy pad — it will blow spores throughout your entire house.
+                    </div>
+                    <ol>
+            <li>🚫 Turn off power to the humidifier at the switch or breaker.</li>
+            <li>🔩 Open the humidifier panel — usually one or two thumb screws or latches.</li>
+            <li>🧻 Remove the old water panel/cartridge — note which direction the water flows.</li>
+            <li>🍶 Soak the distribution tray in vinegar for 10 minutes to dissolve mineral buildup.</li>
+            <li>🧹 Vacuum out any sediment or debris from the drain pan and housing.</li>
+            <li>🧻 Install the new pad with the colored dots facing UP (water flows down through it).</li>
+                    </ol>
+                    <p style="margin-top:.75rem;font-size:.82rem;color:#888;">
+                        <strong>💡 Pro Tip:</strong> Write the replacement date on the new pad with a Sharpie so you know when it's due next year.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- smart-thermostat -->
+        <div class="diy-card collapsed" data-difficulty="intermediate">
+            <div class="diy-header" onclick="toggleCard(this.parentElement)">
+                <div class="diy-icon">📱</div>
+                <div class="diy-title">
+                    <h3>Install a Smart Thermostat</h3>
+                    <div class="diy-meta">
+                        <span class="diy-badge difficulty-intermediate">intermediate</span>
+                        <span>⏱️ 45-60 minutes</span>
+                        <span>💰 $150-250</span>
+                    </div>
+                </div>
+                <button class="diy-btn diy-btn-primary" style="margin-left:auto;font-size:.8rem;padding:.4rem .8rem;" onclick="event.stopPropagation();toggleCard(this.closest('.diy-card'))">
+                    📖 Read Guide
+                </button>
+            </div>
+            <div class="diy-expand">
+                <div class="diy-content">
+                    <p><strong>Save 10-15% on energy bills with a programmable smart thermostat. Most homeowners can install it themselves.</strong></p>
+                    
+                    <h4 style="margin-top:1rem;color:#1a1a2e;">🛠️ Tools You'll Need</h4>
+                    <ul style="list-style:none;padding:0;margin:.5rem 0;">
+        <li><a href="https://www.amazon.com/s?k=smart+thermostat" target="_blank" style="color:#1a1a2e;text-decoration:none;font-weight:600;">📱 Smart Thermostat <span style="color:#e94560;font-size:.8rem;">$150-250</span></a></li>
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🪛 Screwdriver Set</a></li>
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🏷️ Wire Labels <span style="color:#e94560;font-size:.8rem;">$5</span></a></li>
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">📐 Level</a></li>
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🔩 Drill</a></li>
+                    </ul>
+                </div>
+                
+                <div class="diy-steps">
+                    <div class="warning">
+                        <strong>⚠️ Safety First:</strong> If your system has thick wires (120V line voltage) instead of thin low-voltage wires, stop and call a pro. Smart thermostats only work with 24V low-voltage systems.
+                    </div>
+                    <ol>
+            <li>🚫 Turn OFF power to your HVAC system at the breaker — this is critical for safety.</li>
+            <li>🪛 Remove the old thermostat faceplate and take a photo of the wire configuration before disconnecting.</li>
+            <li>🏷️ Label each wire with the letter code (R, W, Y, G, C, etc.) — match letters exactly.</li>
+            <li>🔩 Remove the old mounting plate and install the new base, using a level to keep it straight.</li>
+            <li>🔗 Connect wires to matching terminals on the new thermostat (R→R, W→W, etc.).</li>
+            <li>📱 Turn power back on, follow the setup wizard, and connect to WiFi for remote control.</li>
+                    </ol>
+                    <p style="margin-top:.75rem;font-size:.82rem;color:#888;">
+                        <strong>💡 Pro Tip:</strong> Most smart thermostats have a compatibility checker on their website — enter your wire letters before buying to confirm it will work with your system.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- furnace-pilot -->
+        <div class="diy-card collapsed" data-difficulty="beginner">
+            <div class="diy-header" onclick="toggleCard(this.parentElement)">
+                <div class="diy-icon">🔥</div>
+                <div class="diy-title">
+                    <h3>Relight Your Furnace Pilot Light</h3>
+                    <div class="diy-meta">
+                        <span class="diy-badge difficulty-beginner">beginner</span>
+                        <span>⏱️ 15 minutes</span>
+                        <span>💰 $0</span>
+                    </div>
+                </div>
+                <button class="diy-btn diy-btn-primary" style="margin-left:auto;font-size:.8rem;padding:.4rem .8rem;" onclick="event.stopPropagation();toggleCard(this.closest('.diy-card'))">
+                    📖 Read Guide
+                </button>
+            </div>
+            <div class="diy-expand">
+                <div class="diy-content">
+                    <p><strong>A blown-out pilot light is the #1 cause of 'no heat' calls. Relighting it yourself takes 5 minutes and saves a $150 service fee.</strong></p>
+                    
+                    <h4 style="margin-top:1rem;color:#1a1a2e;">🛠️ Tools You'll Need</h4>
+                    <ul style="list-style:none;padding:0;margin:.5rem 0;">
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🔥 Long Match or Lighter</a></li>
+        <li><a style="color:#1a1a2e;text-decoration:none;font-weight:600;">🔦 Flashlight</a></li>
+                    </ul>
+                </div>
+                
+                <div class="diy-steps">
+                    <div class="warning">
+                        <strong>⚠️ Safety First:</strong> If you smell gas, do NOT attempt to light the pilot. Turn off the gas valve, leave the house, and call the gas company from outside.
+                    </div>
+                    <ol>
+            <li>🚫 Turn the gas valve to OFF and wait 5 minutes for any gas to dissipate (smell for gas first).</li>
+            <li>🔦 Find the pilot assembly — it's a small tube near the burners with a knob labeled PILOT.</li>
+            <li>🔥 Turn the knob to PILOT and press down. Hold a lit match or long lighter at the pilot opening.</li>
+            <li>🔥 Keep the knob pressed for 30-60 seconds after the pilot lights to heat the thermocouple.</li>
+            <li>🔄 Release the knob slowly — if the pilot stays lit, turn the knob to ON.</li>
+            <li>🔥 If the pilot won't stay lit after 3 tries, the thermocouple may need replacement — call a pro.</li>
+                    </ol>
+                    <p style="margin-top:.75rem;font-size:.82rem;color:#888;">
+                        <strong>💡 Pro Tip:</strong> Newer furnaces use electronic ignition (no standing pilot). If you don't see a pilot light, your furnace probably has a hot surface igniter — a different repair entirely.
+                    </p>
+                </div>
+            </div>
+        </div>
+    
+    <!-- Custom Request Section -->
+    <div class="diy-custom-request" style="margin-top:2rem;padding:1.5rem;background:linear-gradient(135deg,#f8f9fa,#e9ecef);border-radius:8px;border-left:3px solid #e94560;">
+        <h3 style="font-size:1.1rem;color:#1a1a2e;margin-bottom:.5rem;">🔍 Can't Find What You Need?</h3>
+        <p style="font-size:.88rem;color:#555;margin-bottom:1rem;line-height:1.5;">
+            Don't see your specific project? We can build a custom DIY guide just for you. 
+            <strong>And if someone else asks the same thing later, they'll get your guide instantly.</strong>
+        </p>
+        <button class="diy-btn diy-btn-primary" onclick="openDIYModal()" style="font-size:.9rem;">
+            📤 Request Custom Guide
+        </button>
+    </div>
+    
+    <!-- What DIY'ers Are Saying -->
+    <div class="diy-comments" style="margin-top:2rem;">
+        <h3 style="font-size:1.1rem;color:#1a1a2e;margin-bottom:1rem;">💬 What DIY'ers Are Saying</h3>
+        
+        <div style="text-align:center;padding:2rem;background:#f8f9fa;border-radius:8px;border:2px dashed #ddd;">
+            <div style="font-size:2rem;margin-bottom:.5rem;">💬</div>
+            <h4 style="color:#1a1a2e;margin-bottom:.5rem;">No Reviews Yet</h4>
+            <p style="color:#888;font-size:.9rem;margin-bottom:1rem;">Be the first to share your DIY success story!</p>
+            <button class="diy-btn diy-btn-primary" onclick="openCommentModal()" style="font-size:.9rem;">
+                📝 Write a Review
+            </button>
+        </div>
+    </div>
+    
+    <div class="diy-disclaimer">
+        <strong>🔒 When to Call a Pro:</strong> These guides cover basic homeowner tasks. For electrical work beyond low-voltage thermostat wiring, refrigerant handling, gas line work, or anything that makes you uncomfortable — <a href="/contact.html">contact a licensed professional</a> from our directory. Safety first.
+    </div>
 </div>
 
-<div class="footer">
-    <p>&copy; 2026 North NJ Services &mdash; Northern New Jersey Local Business Directory</p>
-    <p style="margin-top:.5rem;"><a href="/contact.html">Contact Us</a> &bull; <a href="/">Home</a></p>
+<!-- Floating DIY Button -->
+<button class="diy-float-btn pulse" onclick="openDIYModal()">
+    <span class="icon">🔨</span>
+    <span>DIY Guides</span>
+</button>
+
+<!-- Custom Request Modal -->
+<div id="diy-modal" class="diy-modal-overlay" style="display:none;">
+    <div class="diy-modal-content" style="max-width:500px;width:90%;background:#fff;border-radius:12px;padding:2rem;position:relative;">
+        <button onclick="closeDIYModal()" style="position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.5rem;cursor:pointer;">&times;</button>
+        <h3 style="margin-top:0;color:#1a1a2e;">🔍 Request a Custom Guide</h3>
+        <p style="color:#666;font-size:.9rem;margin-bottom:1.5rem;">Describe your project and we'll build a step-by-step guide just for you.</p>
+        <form id="custom-guide-form" onsubmit="submitDIYRequest(event)">
+            <div style="margin-bottom:1rem;">
+                <label style="display:block;font-size:.85rem;color:#555;margin-bottom:.3rem;font-weight:600;">Your Project</label>
+                <input type="text" name="project" required placeholder="e.g., Fix a running toilet" style="width:100%;padding:.6rem;border:1px solid #ddd;border-radius:6px;font-size:.9rem;box-sizing:border-box;">
+            </div>
+            <div style="margin-bottom:1rem;">
+                <label style="display:block;font-size:.85rem;color:#555;margin-bottom:.3rem;font-weight:600;">Your Email</label>
+                <input type="email" name="email" required placeholder="you@example.com" style="width:100%;padding:.6rem;border:1px solid #ddd;border-radius:6px;font-size:.9rem;box-sizing:border-box;">
+            </div>
+            <div style="margin-bottom:1rem;">
+                <label style="display:block;font-size:.85rem;color:#555;margin-bottom:.3rem;font-weight:600;">Skill Level</label>
+                <select name="skill" style="width:100%;padding:.6rem;border:1px solid #ddd;border-radius:6px;font-size:.9rem;box-sizing:border-box;">
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
+                </select>
+            </div>
+            <div style="margin-bottom:1.5rem;">
+                <label style="display:block;font-size:.85rem;color:#555;margin-bottom:.3rem;font-weight:600;">Additional Details</label>
+                <textarea name="details" rows="3" placeholder="Any specific tools, budget, or concerns..." style="width:100%;padding:.6rem;border:1px solid #ddd;border-radius:6px;font-size:.9rem;box-sizing:border-box;resize:vertical;"></textarea>
+            </div>
+            <button type="submit" class="diy-btn diy-btn-primary" style="width:100%;font-size:1rem;padding:.75rem;">📤 Submit Request</button>
+        </form>
+        <div id="diy-success" style="display:none;text-align:center;padding:2rem 0;">
+            <div style="font-size:3rem;margin-bottom:1rem;">🎉</div>
+            <h3 style="color:#22c55e;margin-bottom:.5rem;">Request Submitted!</h3>
+            <p style="color:#555;">We'll email your custom guide within 24 hours.</p>
+        </div>
+    </div>
 </div>
 
+<script>
+function openDIYModal() { document.getElementById('diy-modal').style.display = 'flex'; }
+function closeDIYModal() { document.getElementById('diy-modal').style.display = 'none'; document.getElementById('custom-guide-form').reset(); document.getElementById('diy-success').style.display = 'none'; }
+
+function toggleCard(card) {
+    const isCollapsed = card.classList.contains('collapsed');
+    document.querySelectorAll('.diy-card:not(.collapsed)').forEach(c => { if (c !== card) c.classList.add('collapsed'); });
+    if (isCollapsed) card.classList.remove('collapsed'); else card.classList.add('collapsed');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.diy-card').forEach(card => {
+        card.classList.add('collapsed');
+        card.addEventListener('click', function(e) {
+            if (e.target.closest('button, a')) return;
+            toggleCard(this);
+        });
+    });
+});
+
+function submitDIYRequest(e) {
+    e.preventDefault();
+    const form = e.target;
+    const data = new FormData(form);
+    fetch('/api/diy-request', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            project: data.get('project'),
+            email: data.get('email'),
+            skill: data.get('skill'),
+            details: data.get('details'),
+            page: window.location.href
+        })
+    }).then(() => {
+        form.style.display = 'none';
+        document.getElementById('diy-success').style.display = 'block';
+    }).catch(() => {
+        form.style.display = 'none';
+        document.getElementById('diy-success').style.display = 'block';
+    });
+}
+
+// Comment modal functions
+function openCommentModal() { document.getElementById('comment-modal').style.display = 'flex'; }
+function closeCommentModal() { document.getElementById('comment-modal').style.display = 'none'; }
+
+function setRating(value) {
+    document.getElementById('rating-input').value = value;
+    document.querySelectorAll('.star-rating').forEach((star, index) => {
+        star.style.opacity = index < value ? '1' : '.3';
+    });
+}
+
+function submitComment(e) {
+    e.preventDefault();
+    const form = e.target;
+    const data = new FormData(form);
+    fetch('/api/diy-review', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            name: data.get('name'),
+            town: data.get('town'),
+            guide: data.get('guide'),
+            rating: parseInt(data.get('rating')),
+            review: data.get('review'),
+            featured: data.get('featured') === 'yes'
+        })
+    }).then(response => response.json()).then(data => {
+        form.style.display = 'none';
+        document.getElementById('comment-success').style.display = 'block';
+    }).catch(() => {
+        form.style.display = 'none';
+        document.getElementById('comment-success').style.display = 'block';
+    });
+}
+
+document.getElementById('diy-modal').addEventListener('click', function(e) { if (e.target === this) closeDIYModal(); });
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeDIYModal(); });
+</script>
+
+<!-- Analytics Tracking -->
+<script>
+(function() {
+    const pageData = {
+        url: window.location.href,
+        path: window.location.pathname,
+        category: document.querySelector('.diy-section h2')?.textContent || 'unknown',
+        timestamp: new Date().toISOString(),
+        screenSize: `${window.innerWidth}x${window.innerHeight}`,
+        referrer: document.referrer || 'direct'
+    };
+    fetch('/api/diy-analytics/pageview', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(pageData)
+    }).catch(() => {});
+})();
+</script>
+<!-- User Auth System -->
+<button id="auth-trigger" onclick="showAuthModal()" style="position:fixed;top:1rem;right:1rem;z-index:1000;background:#fff;border:1px solid #ddd;border-radius:20px;padding:.4rem .8rem;font-size:.8rem;cursor:pointer;box-shadow:0 2px 4px rgba(0,0,0,.1);">🔐 Sign In</button>
+<script src="/diy-auth.js"></script>
 </body>
 </html>

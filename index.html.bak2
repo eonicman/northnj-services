@@ -4,37 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>North NJ Services - Local Business Directory for Northern New Jersey</title>
-    <meta name="description" content="Find trusted local businesses in Northern New Jersey. Browse verified plumbers, electricians, HVAC technicians, landscapers, roofers, and more. Free directory serving Passaic, Bergen, Morris, and Sussex counties.">
+    <meta name="description" content="Find trusted local businesses in Northern New Jersey. Plumbers, electricians, HVAC, landscaping, computer repair, and more serving Passaic, Bergen, Morris, and Sussex counties.">
     <link rel="canonical" href="https://northnjservices.com">
-    <meta property="og:title" content="North NJ Services - Find Local Plumbers, Electricians, HVAC & More">
-    <meta property="og:description" content="Trusted local business directory for Northern New Jersey. Browse verified plumbers, electricians, HVAC technicians, landscapers, and more in Passaic, Bergen, Morris & Sussex counties.">
-    <meta property="og:url" content="https://northnjservices.com">
-    <meta property="og:type" content="website">
-    <meta property="og:locale" content="en_US">
-    <meta property="og:site_name" content="North NJ Services">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="North NJ Services - Find Local Plumbers, Electricians, HVAC & More">
-    <meta name="twitter:description" content="Trusted local business directory for Northern New Jersey. Browse verified plumbers, electricians, HVAC technicians, landscapers, and more.">
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "North NJ Services",
-      "url": "https://northnjservices.com",
-      "description": "Find trusted local businesses in Northern New Jersey. Plumbers, electricians, HVAC, landscaping, computer repair, and more.",
-      "areaServed": [
-        {"@type": "AdministrativeArea", "name": "Passaic County, NJ"},
-        {"@type": "AdministrativeArea", "name": "Bergen County, NJ"},
-        {"@type": "AdministrativeArea", "name": "Morris County, NJ"},
-        {"@type": "AdministrativeArea", "name": "Sussex County, NJ"}
-      ],
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://northnjservices.com/category/{search_term_string}.html",
-        "query-input": "required name=search_term_string"
-      }
-    }
-    </script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1a1a2e; background: #f8f9fa; line-height: 1.6; }
@@ -72,13 +43,13 @@
         .cta-section p { opacity: .9; margin-bottom: 1rem; }
         .cta-section a { display: inline-block; background: #fff; color: #e94560; padding: .6rem 1.5rem; border-radius: 4px; text-decoration: none; font-weight: 600; transition: transform .2s; }
         .cta-section a:hover { transform: scale(1.05); }
-        .cta-subtle { background: #f0f2f5; color: #555; text-align: center; padding: 1.5rem 1rem; margin: 1.5rem 0; border-radius: 8px; font-size: .9rem; }
-        .cta-subtle h3 { color: #333; margin-bottom: .4rem; font-size: 1.1rem; }
-        .cta-subtle p { margin-bottom: .75rem; }
-        .cta-subtle a { color: #e94560; font-weight: 600; text-decoration: none; }
-        .cta-subtle a:hover { text-decoration: underline; }
         .footer { background: #1a1a2e; color: #aaa; text-align: center; padding: 1.5rem 1rem; font-size: .85rem; }
         .footer a { color: #e94560; text-decoration: none; }
+        .ad-banner { max-width: 728px; margin: 2.5rem auto 1rem; border: 2px dashed #ccc; border-radius: 6px; background: #f0f0f0; text-align: center; padding: 2rem 1rem; color: #999; }
+        .ad-banner .ad-label { font-size: .7rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: .4rem; }
+        .ad-banner .ad-cta { font-size: 1.1rem; font-weight: 600; color: #888; margin-bottom: .5rem; }
+        .ad-banner .ad-link { font-size: .85rem; color: #e94560; text-decoration: none; }
+        .ad-banner .ad-link:hover { text-decoration: underline; }
         @media (max-width: 600px) {
             .header h1 { font-size: 1.6rem; }
             .categories, .business-list { grid-template-columns: 1fr; }
@@ -86,10 +57,31 @@
     </style>
 </head>
 <body>
+<!-- Promo Banner -->
+<div id="promo-banner" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: #fff; padding: 12px 20px; text-align: center; font-family: system-ui, -apple-system, sans-serif; position: sticky; top: 0; z-index: 1000; border-bottom: 2px solid #e94560;">
+  <span style="font-size: 15px; line-height: 1.4;">
+    <strong style="color: #e94560;">📞 SPECIAL OFFER:</strong> Get a professional website + <strong>FREE AI Phone Agent</strong> (3 months — 99/mo value)
+    <a href="tel:8552724773" style="color: #fff; background: #e94560; padding: 4px 12px; border-radius: 4px; text-decoration: none; margin-left: 8px; font-weight: 600; display: inline-block; margin-top: 4px;">Call (855) ARIA-773</a>
+  </span>
+  <button onclick="document.getElementById('promo-banner').style.display='none'; localStorage.setItem('hideBanner', 'true');" style="background: none; border: none; color: #aaa; cursor: pointer; float: right; font-size: 18px; line-height: 1;">&times;</button>
+</div>
+<script>
+  if (localStorage.getItem('hideBanner') === 'true') {
+    document.getElementById('promo-banner').style.display = 'none';
+  }
+</script>
+<!-- End Promo Banner -->
+
+
 
 <div class="header">
     <h1>North NJ Services</h1>
     <p>Your Local Business Directory for Northern New Jersey</p>
+<div style="background:linear-gradient(135deg,#e94560,#c23152);color:#fff;text-align:center;padding:1.5rem;margin:1rem 0;border-radius:8px;">
+    <h3 style="margin-bottom:.5rem;">Want More Customers?</h3>
+    <p style="opacity:.9;margin-bottom:1rem;font-size:.95rem;">Upgrade to Premium for $29/month — featured placement, photos, reviews, and direct leads.</p>
+    <a href="/premium.html" style="display:inline-block;background:#fff;color:#e94560;padding:.6rem 1.5rem;border-radius:4px;text-decoration:none;font-weight:600;">See Premium Options →</a>
+</div>
     <div class="tagline">Passaic &bull; Bergen &bull; Morris &bull; Sussex Counties</div>
 </div>
 
@@ -105,6 +97,12 @@
 </nav>
 
 <div class="container">
+
+    <div class="cta-section">
+        <h2>Need Tech Help for Your Business?</h2>
+        <p>Phone systems, AI setup, computer support, and IT services for small businesses in North NJ.</p>
+        <a href="/contact.html">Get in Touch</a>
+    </div>
 
     <h2 class="section-title">Browse by Category</h2>
     <div class="categories">
@@ -166,18 +164,12 @@
         <a href="/contact.html">Submit Your Listing</a>
     </div>
 
-    <div class="cta-subtle">
-        <h3>Need a Website or AI Phone System?</h3>
-        <p>Professional websites, AI phone agents, and IT services for small businesses.</p>
-        <a href="/contact.html">Learn More</a> &bull; <a href="tel:8552724773">Call (855) ARIA-773</a>
-    </div>
+</div>
 
-    <div class="cta-subtle">
-        <h3>Want More Customers?</h3>
-        <p>Upgrade to Premium — featured placement, photos, reviews, and direct leads.</p>
-        <a href="/premium.html">See Premium Options</a>
-    </div>
-
+<div class="ad-banner">
+    <div class="ad-label">Advertisement</div>
+    <div class="ad-cta">Your Ad Here</div>
+    <a class="ad-link" href="/contact.html">Advertise on North NJ Services &rarr;</a>
 </div>
 
 <div class="footer">
@@ -185,22 +177,5 @@
     <p style="margin-top:.5rem;"><a href="/contact.html">Contact Us</a> &bull; <a href="https://northnjservices.com">northnjservices.com</a></p>
 </div>
 
-<script>
-(function() {
-  var pageData = {
-    url: window.location.href,
-    path: window.location.pathname,
-    category: homepage,
-    timestamp: new Date().toISOString(),
-    screenSize: window.innerWidth + x + window.innerHeight,
-    referrer: document.referrer || direct
-  };
-  fetch(/api/diy-analytics/pageview, {
-    method: POST,
-    headers: { Content-Type: application/json },
-    body: JSON.stringify(pageData)
-  }).catch(function() {});
-})();
-</script>
 </body>
-</html>
+</html>ϋody>

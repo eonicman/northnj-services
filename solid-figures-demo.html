@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            background: #f5f5f5;
+        }
+        .guide-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,.1);
+        }
+        .guide-header {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            margin-bottom: 1rem;
+        }
+        .guide-icon {
+            width: 48px;
+            height: 48px;
+            background: #e0f2fe;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        .guide-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+        .guide-meta {
+            font-size: .8rem;
+            color: #888;
+            display: flex;
+            gap: .5rem;
+        }
+        .difficulty-easy { color: #22c55e; font-weight: 600; }
+        .step-row {
+            display: flex;
+            align-items: flex-start;
+            gap: .75rem;
+            padding: .6rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .step-row:last-child {
+            border-bottom: none;
+        }
+        .step-icon-box {
+            width: 58px;
+            height: 58px;
+            min-width: 58px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1.5px solid #e0e0e0;
+        }
+        .step-icon-box svg {
+            width: 40px;
+            height: 40px;
+        }
+        .step-text {
+            flex: 1;
+            padding-top: 2px;
+        }
+        .step-text strong {
+            color: #1a1a2e;
+            font-size: .9rem;
+            display: block;
+            margin-bottom: .15rem;
+        }
+        .step-text span {
+            color: #888;
+            font-size: .82rem;
+        }
+        .warning-box {
+            background: #fef3c7;
+            border-left: 3px solid #f59e0b;
+            padding: .75rem 1rem;
+            margin: 1rem 0;
+            border-radius: 0 6px 6px 0;
+            font-size: .85rem;
+            color: #92400e;
+        }
+        .tip-box {
+            background: #f0f9ff;
+            border-left: 3px solid #0ea5e9;
+            padding: .75rem 1rem;
+            margin-top: 1rem;
+            border-radius: 0 6px 6px 0;
+            font-size: .85rem;
+            color: #0369a1;
+        }
+        .step-number {
+            font-size: .75rem;
+            color: #e94560;
+            font-weight: 700;
+            margin-bottom: .2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="guide-card">
+        <div class="guide-header">
+            <div class="guide-icon">🌡️</div>
+            <div>
+                <div class="guide-title">Replace Your Thermostat</div>
+                <div class="guide-meta">
+                    <span class="difficulty-easy">● EASY</span>
+                    <span>⏱️ 30 min</span>
+                    <span>💰 $50-150</span>
+                </div>
+            </div>
+        </div>
+        
+        <p style="color:#555;font-size:.9rem;margin-bottom:1rem;">Upgrade to a programmable or smart thermostat to save 10-15% on heating/cooling bills.</p>
+        
+        <div class="warning-box">
+            <strong>⚠️ Safety First:</strong> Turn off power to your HVAC system at the breaker before starting. Verify with a non-contact voltage tester.
+        </div>
+        
+        <div class="steps-container">
+            
+                <div class="step-row">
+                    <div class="step-icon-box"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:42px;height:42px;">
+        
+            <circle cx="50" cy="22" r="11" fill="#1a1a2e"/>
+            <rect x="40" y="32" width="20" height="26" rx="8" fill="#1a1a2e"/>
+            <path d="M32 38 Q38 42 40 44" stroke="#1a1a2e" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <path d="M68 38 Q62 42 60 44" stroke="#1a1a2e" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <path d="M42 58 L38 82" stroke="#1a1a2e" stroke-width="4" stroke-linecap="round"/>
+            <path d="M58 58 L62 82" stroke="#1a1a2e" stroke-width="4" stroke-linecap="round"/>
+            <rect x="18" y="75" width="64" height="16" rx="4" fill="#e94560" stroke="#1a1a2e" stroke-width="2"/>
+            <circle cx="35" cy="83" r="3.5" fill="#fff"/>
+            <circle cx="50" cy="83" r="3.5" fill="#fff"/>
+            <circle cx="65" cy="83" r="3.5" fill="#fff"/>
+    </svg></div>
+                    <div class="step-text">
+                        <div class="step-number">STEP 1</div>
+                        <strong>Turn off power at the breaker panel.</strong>
+                        <span>Remove the old thermostat faceplate.</span>
+                    </div>
+                </div>
+            
+                <div class="step-row">
+                    <div class="step-icon-box"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:42px;height:42px;">
+        
+            <circle cx="50" cy="22" r="11" fill="#1a1a2e"/>
+            <rect x="40" y="32" width="20" height="26" rx="8" fill="#1a1a2e"/>
+            <path d="M32 38 Q38 42 40 44" stroke="#1a1a2e" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <path d="M68 38 Q62 42 60 44" stroke="#1a1a2e" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <path d="M42 58 L38 82" stroke="#1a1a2e" stroke-width="4" stroke-linecap="round"/>
+            <path d="M58 58 L62 82" stroke="#1a1a2e" stroke-width="4" stroke-linecap="round"/>
+            <line x1="28" y1="55" x2="28" y2="75" stroke="#e94560" stroke-width="3"/>
+            <text x="23" y="72" font-size="10" fill="#e94560" font-family="Arial" font-weight="bold">R</text>
+            <line x1="50" y1="55" x2="50" y2="75" stroke="#0f3460" stroke-width="3"/>
+            <text x="45" y="72" font-size="10" fill="#0f3460" font-family="Arial" font-weight="bold">W</text>
+            <line x1="72" y1="55" x2="72" y2="75" stroke="#22c55e" stroke-width="3"/>
+            <text x="67" y="72" font-size="10" fill="#22c55e" font-family="Arial" font-weight="bold">Y</text>
+    </svg></div>
+                    <div class="step-text">
+                        <div class="step-number">STEP 2</div>
+                        <strong>Label wires with the provided stickers.</strong>
+                        <span>R, W, Y, G, C — before disconnecting.</span>
+                    </div>
+                </div>
+            
+                <div class="step-row">
+                    <div class="step-icon-box"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:42px;height:42px;">
+        
+            <circle cx="50" cy="22" r="11" fill="#1a1a2e"/>
+            <rect x="40" y="32" width="20" height="26" rx="8" fill="#1a1a2e"/>
+            <path d="M32 38 Q38 42 40 44" stroke="#1a1a2e" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <path d="M68 38 Q62 42 60 40" stroke="#1a1a2e" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <path d="M42 58 L38 82" stroke="#1a1a2e" stroke-width="4" stroke-linecap="round"/>
+            <path d="M58 58 L62 82" stroke="#1a1a2e" stroke-width="4" stroke-linecap="round"/>
+            <rect x="55" y="28" width="28" height="12" rx="3" fill="#888" stroke="#1a1a2e" stroke-width="2"/>
+            <circle cx="78" cy="34" r="4" fill="#e94560"/>
+            <line x1="60" y1="40" x2="56" y2="44" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round"/>
+    </svg></div>
+                    <div class="step-text">
+                        <div class="step-number">STEP 3</div>
+                        <strong>Remove the old base by unscrewing from the wall.</strong>
+                        <span>Keep screws if reusing.</span>
+                    </div>
+                </div>
+            
+                <div class="step-row">
+                    <div class="step-icon-box"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:42px;height:42px;">
+        
+            <circle cx="50" cy="22" r="11" fill="#1a1a2e"/>
+            <rect x="40" y="32" width="20" height="26" rx="8" fill="#1a1a2e"/>
+            <path d="M32 38 Q38 42 40 44" stroke="#1a1a2e" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <path d="M68 38 Q62 42 60 44" stroke="#1a1a2e" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <path d="M42 58 L38 82" stroke="#1a1a2e" stroke-width="4" stroke-linecap="round"/>
+            <path d="M58 58 L62 82" stroke="#1a1a2e" stroke-width="4" stroke-linecap="round"/>
+            <rect x="22" y="55" width="56" height="32" rx="5" fill="none" stroke="#0f3460" stroke-width="2.5"/>
+            <line x1="28" y1="71" x2="72" y2="71" stroke="#e94560" stroke-width="2" stroke-dasharray="5,3"/>
+            <text x="38" y="67" font-size="8" fill="#666" font-family="Arial" font-weight="600">LEVEL</text>
+    </svg></div>
+                    <div class="step-text">
+                        <div class="step-number">STEP 4</div>
+                        <strong>Install new base — use a level to ensure it's straight.</strong>
+                        <span>Drill new holes if needed.</span>
+                    </div>
+                </div>
+            
+                <div class="step-row">
+                    <div class="step-icon-box"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:42px;height:42px;">
+        
+            <circle cx="50" cy="22" r="11" fill="#1a1a2e"/>
+            <rect x="40" y="32" width="20" height="26" rx="8" fill="#1a1a2e"/>
+            <path d="M32 38 Q38 42 40 44" stroke="#1a1a2e" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <path d="M68 38 Q62 42 60 44" stroke="#1a1a2e" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <path d="M42 58 L38 82" stroke="#1a1a2e" stroke-width="4" stroke-linecap="round"/>
+            <path d="M58 58 L62 82" stroke="#1a1a2e" stroke-width="4" stroke-linecap="round"/>
+            <rect x="22" y="55" width="56" height="28" rx="5" fill="#f8f9fa" stroke="#1a1a2e" stroke-width="2.5"/>
+            <circle cx="34" cy="65" r="5" fill="#e94560"/>
+            <circle cx="50" cy="65" r="5" fill="#0f3460"/>
+            <circle cx="66" cy="65" r="5" fill="#22c55e"/>
+            <line x1="34" y1="55" x2="34" y2="48" stroke="#e94560" stroke-width="2.5"/>
+            <line x1="50" y1="55" x2="50" y2="50" stroke="#0f3460" stroke-width="2.5"/>
+    </svg></div>
+                    <div class="step-text">
+                        <div class="step-number">STEP 5</div>
+                        <strong>Connect wires to matching terminals.</strong>
+                        <span>Most modern thermostats have push-in connectors.</span>
+                    </div>
+                </div>
+            
+                <div class="step-row">
+                    <div class="step-icon-box"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:42px;height:42px;">
+        
+            <circle cx="50" cy="22" r="11" fill="#1a1a2e"/>
+            <rect x="40" y="32" width="20" height="26" rx="8" fill="#1a1a2e"/>
+            <path d="M32 38 Q38 42 40 44" stroke="#1a1a2e" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <path d="M68 38 Q62 42 60 44" stroke="#1a1a2e" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <path d="M42 58 L38 82" stroke="#1a1a2e" stroke-width="4" stroke-linecap="round"/>
+            <path d="M58 58 L62 82" stroke="#1a1a2e" stroke-width="4" stroke-linecap="round"/>
+            <rect x="28" y="52" width="44" height="32" rx="7" fill="#f8f9fa" stroke="#0f3460" stroke-width="2.5"/>
+            <rect x="40" y="62" width="20" height="14" rx="4" fill="#0f3460"/>
+            <text x="46" y="72" font-size="9" fill="#fff" font-family="Arial" font-weight="bold">72°</text>
+            <line x1="64" y1="52" x2="64" y2="42" stroke="#1a1a2e" stroke-width="2.5" stroke-linecap="round"/>
+    </svg></div>
+                    <div class="step-text">
+                        <div class="step-number">STEP 6</div>
+                        <strong>Attach faceplate and power on at the breaker.</strong>
+                        <span>You should hear a click.</span>
+                    </div>
+                </div>
+            
+                <div class="step-row">
+                    <div class="step-icon-box"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:42px;height:42px;">
+        
+            <circle cx="50" cy="22" r="11" fill="#1a1a2e"/>
+            <rect x="40" y="32" width="20" height="26" rx="8" fill="#1a1a2e"/>
+            <path d="M32 38 Q38 42 40 44" stroke="#1a1a2e" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <path d="M68 38 Q62 42 60 44" stroke="#1a1a2e" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <path d="M42 58 L38 82" stroke="#1a1a2e" stroke-width="4" stroke-linecap="round"/>
+            <path d="M58 58 L62 82" stroke="#1a1a2e" stroke-width="4" stroke-linecap="round"/>
+            <rect x="22" y="55" width="56" height="28" rx="5" fill="#f8f9fa" stroke="#0f3460" stroke-width="2.5"/>
+            <circle cx="38" cy="66" r="4" fill="#22c55e"/>
+            <text x="46" y="70" font-size="8" fill="#0f3460" font-family="Arial" font-weight="600">WiFi</text>
+            <circle cx="68" cy="66" r="4" fill="#e94560"/>
+    </svg></div>
+                    <div class="step-text">
+                        <div class="step-number">STEP 7</div>
+                        <strong>Configure settings — schedule, WiFi, preferences.</strong>
+                        <span>Set your temperature schedule.</span>
+                    </div>
+                </div>
+            
+        </div>
+        
+        <div class="tip-box">
+            <strong>💡 Pro Tip:</strong> Take a photo of your old wiring before disconnecting — it's your safety net if you forget which wire goes where.
+        </div>
+    </div>
+</body>
+</html>

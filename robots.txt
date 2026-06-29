@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /draft/
+Disallow: /*-demo.html
+Disallow: /robot-demo.html
 
 Sitemap: https://northnjservices.com/sitemap.xml

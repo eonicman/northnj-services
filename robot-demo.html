@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            background: #f5f5f5;
+        }
+        .guide-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,.1);
+        }
+        .step-row {
+            display: flex;
+            align-items: flex-start;
+            gap: .75rem;
+            padding: .6rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .step-icon-box {
+            width: 55px;
+            height: 55px;
+            min-width: 55px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e0e0e0;
+        }
+        .step-icon-box svg {
+            width: 38px;
+            height: 38px;
+        }
+        .step-text {
+            flex: 1;
+            padding-top: 2px;
+        }
+        .step-text strong {
+            color: #1a1a2e;
+            font-size: .9rem;
+            display: block;
+            margin-bottom: .15rem;
+        }
+        .step-text span {
+            color: #888;
+            font-size: .82rem;
+        }
+        .step-number {
+            font-size: .75rem;
+            color: #e94560;
+            font-weight: 700;
+            margin-bottom: .2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="guide-card">
+        <h2 style="margin-top:0;margin-bottom:1rem;color:#1a1a2e;">Robot-Style Step Icons</h2>
+        
+        <!-- Step 1: Power Off -->
+        <div class="step-row">
+            <div class="step-icon-box">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Robot head -->
+                    <rect x="32" y="8" width="36" height="30" rx="8" fill="#e0e0e0" stroke="#999" stroke-width="2"/>
+                    <!-- Visor/face screen -->
+                    <rect x="36" y="14" width="28" height="16" rx="4" fill="#1a1a2e"/>
+                    <!-- Eyes -->
+                    <circle cx="44" cy="22" r="3" fill="#0ea5e9"/>
+                    <circle cx="56" cy="22" r="3" fill="#0ea5e9"/>
+                    <!-- Neck -->
+                    <rect x="44" y="38" width="12" height="8" fill="#c0c0c0"/>
+                    <!-- Body -->
+                    <rect x="30" y="46" width="40" height="28" rx="6" fill="#e0e0e0" stroke="#999" stroke-width="2"/>
+                    <!-- Chest panel -->
+                    <rect x="38" y="52" width="24" height="16" rx="3" fill="#f5f5f5" stroke="#ccc" stroke-width="1"/>
+                    <!-- Left arm -->
+                    <path d="M30 52 L20 68" stroke="#c0c0c0" stroke-width="6" stroke-linecap="round"/>
+                    <!-- Right arm reaching to breaker -->
+                    <path d="M70 52 Q82 60 75 72" stroke="#c0c0c0" stroke-width="6" stroke-linecap="round" fill="none"/>
+                    <!-- Hand -->
+                    <circle cx="75" cy="74" r="4" fill="#999"/>
+                    <!-- Breaker panel -->
+                    <rect x="60" y="72" width="30" height="18" rx="3" fill="#e94560" stroke="#1a1a2e" stroke-width="2"/>
+                    <circle cx="68" cy="81" r="3" fill="#fff"/>
+                    <circle cx="82" cy="81" r="3" fill="#fff"/>
+                    <!-- Legs -->
+                    <path d="M38 74 L35 92" stroke="#c0c0c0" stroke-width="6" stroke-linecap="round"/>
+                    <path d="M62 74 L65 92" stroke="#c0c0c0" stroke-width="6" stroke-linecap="round"/>
+                    <!-- Feet -->
+                    <ellipse cx="35" cy="94" rx="8" ry="3" fill="#999"/>
+                    <ellipse cx="65" cy="94" rx="8" ry="3" fill="#999"/>
+                </svg>
+            </div>
+            <div class="step-text">
+                <div class="step-number">STEP 1</div>
+                <strong>Turn off power at the breaker panel.</strong>
+                <span>Remove the old thermostat faceplate.</span>
+            </div>
+        </div>
+
+        <!-- Step 2: Label Wires -->
+        <div class="step-row">
+            <div class="step-icon-box">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Robot head -->
+                    <rect x="32" y="8" width="36" height="30" rx="8" fill="#e0e0e0" stroke="#999" stroke-width="2"/>
+                    <rect x="36" y="14" width="28" height="16" rx="4" fill="#1a1a2e"/>
+                    <circle cx="44" cy="22" r="3" fill="#0ea5e9"/>
+                    <circle cx="56" cy="22" r="3" fill="#0ea5e9"/>
+                    <!-- Neck -->
+                    <rect x="44" y="38" width="12" height="8" fill="#c0c0c0"/>
+                    <!-- Body -->
+                    <rect x="30" y="46" width="40" height="28" rx="6" fill="#e0e0e0" stroke="#999" stroke-width="2"/>
+                    <rect x="38" y="52" width="24" height="16" rx="3" fill="#f5f5f5" stroke="#ccc" stroke-width="1"/>
+                    <!-- Left arm holding label -->
+                    <path d="M30 52 Q20 60 25 72" stroke="#c0c0c0" stroke-width="6" stroke-linecap="round" fill="none"/>
+                    <circle cx="25" cy="74" r="4" fill="#999"/>
+                    <!-- Right arm pointing to wires -->
+                    <path d="M70 52 Q78 60 72 68" stroke="#c0c0c0" stroke-width="6" stroke-linecap="round" fill="none"/>
+                    <circle cx="72" cy="70" r="4" fill="#999"/>
+                    <!-- Wires behind -->
+                    <line x1="10" y1="55" x2="10" y2="80" stroke="#e94560" stroke-width="2.5"/>
+                    <line x1="22" y1="55" x2="22" y2="80" stroke="#0f3460" stroke-width="2.5"/>
+                    <line x1="34" y1="55" x2="34" y2="80" stroke="#22c55e" stroke-width="2.5"/>
+                    <!-- Labels -->
+                    <rect x="6" y="75" width="8" height="10" rx="2" fill="#fff" stroke="#e94560" stroke-width="1"/>
+                    <text x="8" y="82" font-size="7" fill="#e94560" font-family="Arial" font-weight="bold">R</text>
+                    <rect x="18" y="75" width="8" height="10" rx="2" fill="#fff" stroke="#0f3460" stroke-width="1"/>
+                    <text x="20" y="82" font-size="7" fill="#0f3460" font-family="Arial" font-weight="bold">W</text>
+                    <rect x="30" y="75" width="8" height="10" rx="2" fill="#fff" stroke="#22c55e" stroke-width="1"/>
+                    <text x="32" y="82" font-size="7" fill="#22c55e" font-family="Arial" font-weight="bold">Y</text>
+                    <!-- Legs -->
+                    <path d="M38 74 L35 92" stroke="#c0c0c0" stroke-width="6" stroke-linecap="round"/>
+                    <path d="M62 74 L65 92" stroke="#c0c0c0" stroke-width="6" stroke-linecap="round"/>
+                    <ellipse cx="35" cy="94" rx="8" ry="3" fill="#999"/>
+                    <ellipse cx="65" cy="94" rx="8" ry="3" fill="#999"/>
+                </svg>
+            </div>
+            <div class="step-text">
+                <div class="step-number">STEP 2</div>
+                <strong>Label wires with the provided stickers.</strong>
+                <span>R, W, Y, G, C — before disconnecting.</span>
+            </div>
+        </div>
+
+        <!-- Step 3: Remove Base -->
+        <div class="step-row">
+            <div class="step-icon-box">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Robot head -->
+                    <rect x="32" y="8" width="36" height="30" rx="8" fill="#e0e0e0" stroke="#999" stroke-width="2"/>
+                    <rect x="36" y="14" width="28" height="16" rx="4" fill="#1a1a2e"/>
+                    <circle cx="44" cy="22" r="3" fill="#0ea5e9"/>
+                    <circle cx="56" cy="22" r="3" fill="#0ea5e9"/>
+                    <!-- Neck -->
+                    <rect x="44" y="38" width="12" height="8" fill="#c0c0c0"/>
+                    <!-- Body -->
+                    <rect x="30" y="46" width="40" height="28" rx="6" fill="#e0e0e0" stroke="#999" stroke-width="2"/>
+                    <rect x="38" y="52" width="24" height="16" rx="3" fill="#f5f5f5" stroke="#ccc" stroke-width="1"/>
+                    <!-- Wall plate behind -->
+                    <rect x="55" y="30" width="28" height="12" rx="2" fill="#ddd" stroke="#999" stroke-width="1.5"/>
+                    <circle cx="78" cy="36" r="3" fill="#888"/>
+                    <!-- Left arm -->
+                    <path d="M30 52 L20 68" stroke="#c0c0c0" stroke-width="6" stroke-linecap="round"/>
+                    <!-- Right arm with screwdriver -->
+                    <path d="M70 52 Q80 45 82 38" stroke="#c0c0c0" stroke-width="6" stroke-linecap="round" fill="none"/>
+                    <circle cx="82" cy="36" r="4" fill="#999"/>
+                    <!-- Screwdriver -->
+                    <rect x="80" y="22" width="4" height="16" rx="1" fill="#666"/>
+                    <rect x="78" y="18" width="8" height="6" rx="2" fill="#e94560"/>
+                    <!-- Legs -->
+                    <path d="M38 74 L35 92" stroke="#c0c0c0" stroke-width="6" stroke-linecap="round"/>
+                    <path d="M62 74 L65 92" stroke="#c0c0c0" stroke-width="6" stroke-linecap="round"/>
+                    <ellipse cx="35" cy="94" rx="8" ry="3" fill="#999"/>
+                    <ellipse cx="65" cy="94" rx="8" ry="3" fill="#999"/>
+                </svg>
+            </div>
+            <div class="step-text">
+                <div class="step-number">STEP 3</div>
+                <strong>Remove the old base by unscrewing from the wall.</strong>
+                <span>Keep screws if reusing.</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
