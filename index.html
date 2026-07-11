@@ -4,37 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>North NJ Services - Local Business Directory for Northern New Jersey</title>
-    <meta name="description" content="Find trusted local businesses in Northern New Jersey. Browse verified plumbers, electricians, HVAC technicians, landscapers, roofers, and more. Free directory serving Passaic, Bergen, Morris, and Sussex counties.">
+    <meta name="description" content="Find trusted local businesses in Northern New Jersey. Plumbers, electricians, HVAC, landscaping, computer repair, and more serving Passaic, Bergen, Morris, and Sussex counties.">
     <link rel="canonical" href="https://northnjservices.com">
-    <meta property="og:title" content="North NJ Services - Find Local Plumbers, Electricians, HVAC & More">
-    <meta property="og:description" content="Trusted local business directory for Northern New Jersey. Browse verified plumbers, electricians, HVAC technicians, landscapers, and more in Passaic, Bergen, Morris & Sussex counties.">
-    <meta property="og:url" content="https://northnjservices.com">
-    <meta property="og:type" content="website">
-    <meta property="og:locale" content="en_US">
-    <meta property="og:site_name" content="North NJ Services">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="North NJ Services - Find Local Plumbers, Electricians, HVAC & More">
-    <meta name="twitter:description" content="Trusted local business directory for Northern New Jersey. Browse verified plumbers, electricians, HVAC technicians, landscapers, and more.">
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "North NJ Services",
-      "url": "https://northnjservices.com",
-      "description": "Find trusted local businesses in Northern New Jersey. Plumbers, electricians, HVAC, landscaping, computer repair, and more.",
-      "areaServed": [
-        {"@type": "AdministrativeArea", "name": "Passaic County, NJ"},
-        {"@type": "AdministrativeArea", "name": "Bergen County, NJ"},
-        {"@type": "AdministrativeArea", "name": "Morris County, NJ"},
-        {"@type": "AdministrativeArea", "name": "Sussex County, NJ"}
-      ],
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://northnjservices.com/category/{search_term_string}.html",
-        "query-input": "required name=search_term_string"
-      }
-    }
-    </script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1a1a2e; background: #f8f9fa; line-height: 1.6; }
@@ -84,6 +55,10 @@
             .categories, .business-list { grid-template-columns: 1fr; }
         }
     </style>
+    <!-- Meta Pixel Code -->
+    <script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','2365581200850996');fbq('track','PageView');</script>
+    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=2365581200850996&ev=PageView&noscript=1"/></noscript>
+    <!-- End Meta Pixel Code -->
 </head>
 <body>
 
@@ -182,25 +157,12 @@
 
 <div class="footer">
     <p>&copy; 2026 North NJ Services &mdash; Northern New Jersey Local Business Directory</p>
-    <p style="margin-top:.5rem;"><a href="/contact.html">Contact Us</a> &bull; <a href="https://northnjservices.com">northnjservices.com</a></p>
+    <p style="margin-top:.5rem;"><a href="/contact.html">Contact Us</a> &bull; <a href="https://northnjservices.com">northnjservices.com</a> &bull; <a href="/privacy.html">Privacy Policy</a></p>
 </div>
-
+<div style="text-align:center;font-size:0.75em;color:#888;margin-top:8px;padding:5px;">👁 <span id="vc-count">...</span> visits</div>
 <script>
-(function() {
-  var pageData = {
-    url: window.location.href,
-    path: window.location.pathname,
-    category: homepage,
-    timestamp: new Date().toISOString(),
-    screenSize: window.innerWidth + x + window.innerHeight,
-    referrer: document.referrer || direct
-  };
-  fetch(/api/diy-analytics/pageview, {
-    method: POST,
-    headers: { Content-Type: application/json },
-    body: JSON.stringify(pageData)
-  }).catch(function() {});
-})();
+(function(){var k="bbs-vc-"+window.location.pathname.replace(/[^a-z0-9]/gi,"_");var c=parseInt(localStorage.getItem(k)||"0",10)+1;localStorage.setItem(k,""+c);var el=document.getElementById("vc-count");if(el)el.textContent=c.toLocaleString();})();
 </script>
+
 </body>
 </html>
