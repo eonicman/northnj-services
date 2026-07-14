@@ -23,6 +23,7 @@ export default {
       if (p === "/api/diy-review" && request.method === "POST") return diyReview(request, env, url);
       if (p === "/api/diy-analytics/pageview" && request.method === "POST") return diyAnalytics(request, env, url);
       if (p === "/api/diy-top" && request.method === "GET") return diyTop(request, env, url);
+      if (p === "/api/_feed" && request.method === "GET") return feed(request, env, url);
     } catch (e) {
       return json({ status: "error", message: "server error" }, 500);
     }
@@ -155,6 +156,21 @@ async function diyTop(request, env, url) {
          GROUP BY lower(project) ORDER BY n DESC LIMIT ?`).bind(url.host, limit);
   const rows = await q.all();
   return json({ status: "ok", category, top: (rows.results || []).map(r => ({ project: r.project, count: r.n })) });
+}
+
+/* ---------- internal feed (token-gated) for the NightShift lead-monitor ---------- */
+async function feed(request, env, url) {
+  const key = url.searchParams.get("key") || "";
+  if (!env.FEED_KEY || key !== env.FEED_KEY) return new Response("Not found", { status: 404 });
+  const al = parseInt(url.searchParams.get("after_lead"), 10) || 0;
+  const ad = parseInt(url.searchParams.get("after_diy"), 10) || 0;
+  const leads = await env.LEADS.prepare(
+    `SELECT id, site, source, business, name, phone, email, interest, message, created_at
+     FROM leads WHERE id > ? ORDER BY id LIMIT 50`).bind(al).all();
+  const diy = await env.LEADS.prepare(
+    `SELECT id, site, category, project, email, created_at
+     FROM diy_requests WHERE id > ? ORDER BY id LIMIT 50`).bind(ad).all();
+  return json({ status: "ok", leads: leads.results || [], diy: diy.results || [] });
 }
 
 /* ---------- shared HTML pages (lead thank-you) ---------- */
