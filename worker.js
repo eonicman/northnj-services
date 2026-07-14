@@ -166,10 +166,10 @@ async function feed(request, env, url) {
   const ad = parseInt(url.searchParams.get("after_diy"), 10) || 0;
   const leads = await env.LEADS.prepare(
     `SELECT id, site, source, business, name, phone, email, interest, message, created_at
-     FROM leads WHERE id > ? ORDER BY id LIMIT 50`).bind(al).all();
+     FROM leads WHERE id > ? AND site = ? ORDER BY id LIMIT 50`).bind(al, url.host).all();
   const diy = await env.LEADS.prepare(
     `SELECT id, site, category, project, email, created_at
-     FROM diy_requests WHERE id > ? ORDER BY id LIMIT 50`).bind(ad).all();
+     FROM diy_requests WHERE id > ? AND site = ? ORDER BY id LIMIT 50`).bind(ad, url.host).all();
   return json({ status: "ok", leads: leads.results || [], diy: diy.results || [] });
 }
 
