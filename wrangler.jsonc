@@ -1,14 +1,23 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "northnj-services",
+  "main": "worker.js",
   "compatibility_date": "2026-07-14",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
   "observability": {
     "enabled": true
   },
   "assets": {
-    "directory": "."
+    "directory": ".",
+    "binding": "ASSETS"
   },
-  "compatibility_flags": [
-    "nodejs_compat"
+  "d1_databases": [
+    {
+      "binding": "LEADS",
+      "database_name": "directory-leads",
+      "database_id": "6e62cee1-81ba-4d35-917e-708087500877"
+    }
   ]
 }
