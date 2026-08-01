@@ -5,8 +5,13 @@
 //   POST /api/diy-review           -> store a guide review (diy_reviews, pending moderation)
 //   POST /api/diy-analytics/pageview -> store a pageview (diy_analytics)
 //   GET  /api/diy-top?category=..  -> top requested projects for a category (live ranking)
+//   POST /api/user/register        -> create a reader account (users), return session token
+//   POST /api/user/login           -> verify password, return session token
+//   GET  /api/user/me              -> current user + saved_guides (Bearer token)
+//   POST /api/user/save-guide      -> save a guide to the signed-in user's library
 //   everything else                -> static assets (env.ASSETS), unchanged
-// D1 binding: env.LEADS -> database "directory-leads".
+// D1 binding: env.LEADS -> database "directory-leads" (shared with mohawk-valley-services;
+//   tables scoped by `site` = url.host, including users/user_sessions/saved_guides).
 
 export default {
   async fetch(request, env, ctx) {
@@ -24,6 +29,10 @@ export default {
       if (p === "/api/diy-analytics/pageview" && request.method === "POST") return diyAnalytics(request, env, url);
       if (p === "/api/diy-top" && request.method === "GET") return diyTop(request, env, url);
       if (p === "/api/_feed" && request.method === "GET") return feed(request, env, url);
+      if (p === "/api/user/register" && request.method === "POST") return userRegister(request, env, url);
+      if (p === "/api/user/login" && request.method === "POST") return userLogin(request, env, url);
+      if (p === "/api/user/me" && request.method === "GET") return userMe(request, env, url);
+      if (p === "/api/user/save-guide" && request.method === "POST") return userSaveGuide(request, env, url);
     } catch (e) {
       return json({ status: "error", message: "server error" }, 500);
     }
@@ -171,6 +180,109 @@ async function feed(request, env, url) {
     `SELECT id, site, category, project, email, created_at
      FROM diy_requests WHERE id > ? AND site = ? ORDER BY id LIMIT 50`).bind(ad, url.host).all();
   return json({ status: "ok", leads: leads.results || [], diy: diy.results || [] });
+}
+
+/* ---------- reader accounts (diy-auth.js: register/login/me/save-guide) ---------- */
+const SESSION_DAYS = 30;
+const PBKDF2_ITERATIONS = 100000;
+
+function bytesToHex(bytes) {
+  return Array.from(bytes).map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+function hexToBytes(hex) {
+  const out = new Uint8Array(hex.length / 2);
+  for (let i = 0; i < out.length; i++) out[i] = parseInt(hex.substr(i * 2, 2), 16);
+  return out;
+}
+function randomHex(numBytes) {
+  return bytesToHex(crypto.getRandomValues(new Uint8Array(numBytes)));
+}
+function timingSafeEqual(a, b) {
+  if (a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return diff === 0;
+}
+async function hashPassword(password, saltHex) {
+  const salt = saltHex ? hexToBytes(saltHex) : crypto.getRandomValues(new Uint8Array(16));
+  const keyMaterial = await crypto.subtle.importKey("raw", new TextEncoder().encode(password), "PBKDF2", false, ["deriveBits"]);
+  const bits = await crypto.subtle.deriveBits(
+    { name: "PBKDF2", salt, iterations: PBKDF2_ITERATIONS, hash: "SHA-256" },
+    keyMaterial,
+    256
+  );
+  return { hash: bytesToHex(new Uint8Array(bits)), salt: bytesToHex(salt) };
+}
+async function createSession(env, userId) {
+  const token = randomHex(32);
+  const expires = new Date(Date.now() + SESSION_DAYS * 24 * 60 * 60 * 1000).toISOString();
+  await env.LEADS.prepare(`INSERT INTO user_sessions (token, user_id, expires_at) VALUES (?,?,?)`)
+    .bind(token, userId, expires).run();
+  return token;
+}
+async function userFromRequest(request, env) {
+  const auth = request.headers.get("Authorization") || "";
+  const m = /^Bearer\s+(.+)$/.exec(auth);
+  if (!m) return null;
+  const row = await env.LEADS.prepare(
+    `SELECT u.id, u.name, u.email FROM user_sessions s JOIN users u ON u.id = s.user_id
+     WHERE s.token = ? AND s.expires_at > datetime('now')`
+  ).bind(m[1]).first();
+  return row || null;
+}
+
+async function userRegister(request, env, url) {
+  const data = await readBody(request);
+  const email = S(data.email, 200).trim().toLowerCase();
+  const password = S(data.password, 200);
+  const name = S(data.name, 120);
+  if (!email || !password || password.length < 6) {
+    return json({ error: "Email and a password of at least 6 characters are required" }, 400);
+  }
+  const existing = await env.LEADS.prepare(`SELECT id FROM users WHERE site=? AND email=?`)
+    .bind(url.host, email).first();
+  if (existing) return json({ error: "An account with that email already exists" }, 409);
+  const { hash, salt } = await hashPassword(password);
+  const res = await env.LEADS.prepare(
+    `INSERT INTO users (site, email, name, password_hash, password_salt) VALUES (?,?,?,?,?)`
+  ).bind(url.host, email, name, hash, salt).run();
+  const userId = res.meta.last_row_id;
+  const token = await createSession(env, userId);
+  return json({ token, user: { id: userId, name, email } });
+}
+
+async function userLogin(request, env, url) {
+  const data = await readBody(request);
+  const email = S(data.email, 200).trim().toLowerCase();
+  const password = S(data.password, 200);
+  const user = await env.LEADS.prepare(`SELECT id, name, email, password_hash, password_salt FROM users WHERE site=? AND email=?`)
+    .bind(url.host, email).first();
+  if (!user) return json({ error: "Invalid email or password" }, 401);
+  const { hash } = await hashPassword(password, user.password_salt);
+  if (!timingSafeEqual(hash, user.password_hash)) return json({ error: "Invalid email or password" }, 401);
+  const token = await createSession(env, user.id);
+  return json({ token, user: { id: user.id, name: user.name, email: user.email } });
+}
+
+async function userMe(request, env, url) {
+  const user = await userFromRequest(request, env);
+  if (!user) return json({ error: "Not signed in" }, 401);
+  const guides = await env.LEADS.prepare(
+    `SELECT guide_id, category, guide_title FROM saved_guides WHERE user_id=? ORDER BY created_at DESC`
+  ).bind(user.id).all();
+  return json({ user: { ...user, saved_guides: guides.results || [] } });
+}
+
+async function userSaveGuide(request, env, url) {
+  const user = await userFromRequest(request, env);
+  if (!user) return json({ error: "Not signed in" }, 401);
+  const data = await readBody(request);
+  const guideId = S(data.guideId, 200);
+  if (!guideId) return json({ error: "guideId required" }, 400);
+  await env.LEADS.prepare(
+    `INSERT OR IGNORE INTO saved_guides (user_id, guide_id, category, guide_title) VALUES (?,?,?,?)`
+  ).bind(user.id, guideId, S(data.category, 120), S(data.guideTitle, 300)).run();
+  return json({ success: true });
 }
 
 /* ---------- shared HTML pages (lead thank-you) ---------- */
