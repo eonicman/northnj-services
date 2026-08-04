@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In — North NJ Services</title>
+    <meta name="description" content="Sign in or create an account to save your DIY guides on North NJ Services.">
+    <link rel="canonical" href="https://northnjservices.com/account.html">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1a1a2e; background: #f8f9fa; line-height: 1.6; }
+        .header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); color: #fff; padding: 2rem 1rem; text-align: center; }
+        .header h1 { font-size: 2rem; margin-bottom: .5rem; }
+        .nav { background: #16213e; display: flex; flex-wrap: wrap; justify-content: center; gap: .25rem; padding: .75rem 1rem; }
+        .nav a { color: #e0e0e0; text-decoration: none; padding: .4rem .8rem; border-radius: 4px; font-size: .85rem; transition: background .2s; }
+        .nav a:hover { background: rgba(255,255,255,.15); color: #fff; }
+        .container { max-width: 420px; margin: 0 auto; padding: 3rem 1rem; }
+        .card { background: #fff; border-radius: 8px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+        .card h2 { color: #0f3460; margin-bottom: 1.25rem; font-size: 1.4rem; }
+        .field { margin-bottom: 1rem; }
+        .field input { width: 100%; padding: .7rem; border: 1px solid #ddd; border-radius: 6px; font-size: .95rem; }
+        .field input:focus { outline: none; border-color: #e94560; }
+        .btn-primary { width: 100%; background: #e94560; color: #fff; border: none; padding: .85rem; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; margin-top: .5rem; }
+        .btn-primary:hover { background: #c23152; }
+        .switch { text-align: center; margin-top: 1.25rem; font-size: .9rem; color: #666; }
+        .switch a { color: #e94560; text-decoration: none; font-weight: 600; cursor: pointer; }
+        .error { background: #fdecea; color: #c0392b; border-radius: 6px; padding: .6rem .8rem; font-size: .85rem; margin-bottom: 1rem; display: none; }
+        .dash-item { padding: .6rem 0; border-bottom: 1px solid #eee; font-size: .92rem; color: #444; }
+        .dash-item:last-child { border-bottom: none; }
+        .empty { color: #888; font-size: .9rem; padding: 1rem 0; text-align: center; }
+        .btn-logout { display: block; width: 100%; text-align: center; margin-top: 1.5rem; padding: .7rem; border: 1px solid #ddd; border-radius: 6px; color: #666; text-decoration: none; font-size: .9rem; background: none; cursor: pointer; }
+        .btn-logout:hover { background: #f8f9fa; }
+        .user-name { font-weight: 600; color: #0f3460; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>Your Account</h1>
+    <p>Sign in to save and revisit your DIY guides</p>
+</div>
+
+<nav class="nav">
+    <a href="/">Home</a>
+    <a href="/website-services.html">Website Services</a>
+    <a href="/about.html">About</a>
+</nav>
+
+<div class="container">
+    <div class="card" id="logged-out-view">
+        <div class="error" id="err-msg"></div>
+
+        <div id="login-form">
+            <h2>🔐 Sign In</h2>
+            <form onsubmit="return doLogin(event)">
+                <div class="field"><input type="email" id="login-email" required placeholder="Email"></div>
+                <div class="field"><input type="password" id="login-password" required placeholder="Password"></div>
+                <button type="submit" class="btn-primary">Sign In</button>
+            </form>
+            <div class="switch">No account? <a onclick="toggleForm('register')">Create one</a></div>
+        </div>
+
+        <div id="register-form" style="display:none;">
+            <h2>📝 Create Account</h2>
+            <form onsubmit="return doRegister(event)">
+                <div class="field"><input type="text" id="reg-name" placeholder="Your Name"></div>
+                <div class="field"><input type="email" id="reg-email" required placeholder="Email"></div>
+                <div class="field"><input type="password" id="reg-password" required placeholder="Password (6+ chars)"></div>
+                <button type="submit" class="btn-primary">Create Account</button>
+            </form>
+            <div class="switch">Have an account? <a onclick="toggleForm('login')">Sign in</a></div>
+        </div>
+    </div>
+
+    <div class="card" id="logged-in-view" style="display:none;">
+        <h2>Welcome, <span class="user-name" id="welcome-name"></span></h2>
+        <div id="guides-list"></div>
+        <button class="btn-logout" onclick="doLogout()">🚪 Sign Out</button>
+    </div>
+</div>
+
+<script>
+const API_BASE = '/api';
+
+function showError(msg) {
+    const el = document.getElementById('err-msg');
+    el.textContent = msg;
+    el.style.display = 'block';
+}
+function clearError() {
+    document.getElementById('err-msg').style.display = 'none';
+}
+function toggleForm(which) {
+    clearError();
+    document.getElementById('login-form').style.display = which === 'login' ? 'block' : 'none';
+    document.getElementById('register-form').style.display = which === 'register' ? 'block' : 'none';
+}
+
+function doLogin(e) {
+    e.preventDefault();
+    clearError();
+    fetch(`${API_BASE}/user/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            email: document.getElementById('login-email').value,
+            password: document.getElementById('login-password').value
+        })
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.token) {
+            localStorage.setItem('diy_token', data.token);
+            showLoggedIn(data.user);
+        } else {
+            showError(data.error || 'Login failed');
+        }
+    })
+    .catch(() => showError('Something went wrong. Please try again.'));
+    return false;
+}
+
+function doRegister(e) {
+    e.preventDefault();
+    clearError();
+    fetch(`${API_BASE}/user/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            name: document.getElementById('reg-name').value,
+            email: document.getElementById('reg-email').value,
+            password: document.getElementById('reg-password').value
+        })
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.token) {
+            localStorage.setItem('diy_token', data.token);
+            showLoggedIn(data.user);
+        } else {
+            showError(data.error || 'Registration failed');
+        }
+    })
+    .catch(() => showError('Something went wrong. Please try again.'));
+    return false;
+}
+
+function doLogout() {
+    localStorage.removeItem('diy_token');
+    document.getElementById('logged-out-view').style.display = 'block';
+    document.getElementById('logged-in-view').style.display = 'none';
+    toggleForm('login');
+}
+
+function showLoggedIn(user) {
+    document.getElementById('logged-out-view').style.display = 'none';
+    document.getElementById('logged-in-view').style.display = 'block';
+    document.getElementById('welcome-name').textContent = user.name || user.email;
+
+    const guides = user.saved_guides || [];
+    const list = document.getElementById('guides-list');
+    if (guides.length === 0) {
+        list.innerHTML = '<div class="empty">📚 No saved guides yet. Bookmark a guide from any category page to see it here.</div>';
+    } else {
+        list.innerHTML = guides.map(g => `<div class="dash-item">📖 ${g.guide_title} <span style="color:#888;">— ${g.category}</span></div>`).join('');
+    }
+}
+
+// Check for an existing session on load
+(function checkAuth() {
+    const token = localStorage.getItem('diy_token');
+    if (!token) return;
+    fetch(`${API_BASE}/user/me`, { headers: { 'Authorization': `Bearer ${token}` } })
+        .then(r => r.json())
+        .then(data => { if (data.user) showLoggedIn(data.user); })
+        .catch(() => localStorage.removeItem('diy_token'));
+})();
+</script>
+
+</body>
+</html>
