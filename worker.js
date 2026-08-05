@@ -17,6 +17,10 @@
 // D1 binding: env.LEADS -> database "directory-leads" (shared with mohawk-valley-services;
 //   tables scoped by `site` = url.host, including users/user_sessions/saved_guides).
 
+const SITE_HOST = "northnjservices.com";
+const SITE_NAME = "North NJ Services";
+const guideUrl = (cat, slug) => `https://northnjservices.com/category/${cat}-diy.html#${slug}`;
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -34,6 +38,7 @@ export default {
       if (p === "/api/diy-top" && request.method === "GET") return diyTop(request, env, url);
       if (p === "/api/diy-guides" && request.method === "GET") return diyGuidesList(request, env, url);
       if (p === "/api/_feed" && request.method === "GET") return feed(request, env, url);
+      if (p === "/api/admin/run-diy-fulfillment" && request.method === "POST") return runDiyFulfillmentEndpoint(request, env, url);
       if (p === "/api/user/register" && request.method === "POST") return userRegister(request, env, url);
       if (p === "/api/user/login" && request.method === "POST") return userLogin(request, env, url);
       if (p === "/api/user/me" && request.method === "GET") return userMe(request, env, url);
@@ -42,6 +47,9 @@ export default {
       return json({ status: "error", message: "server error" }, 500);
     }
     return env.ASSETS.fetch(request);
+  },
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil(fulfillDiyRequests(env));
   },
 };
 
@@ -213,6 +221,72 @@ async function diyGuidesList(request, env, url) {
      LIMIT ?`
   ).bind(url.host, url.host, category, limit).all();
   return json({ status: "ok", category, guides: (rows.results || []).map(guideRow) });
+}
+
+/* ---------- DIY: guide-request fulfillment (Cron Trigger, every 15 min) ----------
+   Emails the requester when a matching published guide exists in diy_guides.
+   If no guide exists yet, the request is left unfulfilled -- Ghost generates
+   missing guides via Vaaya and publishes them; the next scheduled run then
+   finds the library hit and sends. */
+async function fulfillDiyRequests(env) {
+  const pending = await env.LEADS.prepare(
+    `SELECT id, category, project, email FROM diy_requests
+     WHERE site=? AND fulfilled_at IS NULL AND email IS NOT NULL AND email != ''
+     ORDER BY created_at ASC LIMIT 5`
+  ).bind(SITE_HOST).all();
+
+  let sent = 0, skipped = 0;
+  for (const req of pending.results || []) {
+    const slug = slugify(req.project);
+    const g = await env.LEADS.prepare(
+      `SELECT * FROM diy_guides WHERE site=? AND category=? AND slug=? AND status='published' LIMIT 1`
+    ).bind(SITE_HOST, req.category, slug).first();
+    if (!g) { skipped++; continue; }
+
+    const guide = guideRow(g);
+    const ok = await sendGuideEmail(env, req.email, guide, guideUrl(req.category, slug));
+    if (ok) {
+      await env.LEADS.prepare(`UPDATE diy_requests SET fulfilled_at = datetime('now') WHERE id=?`).bind(req.id).run();
+      sent++;
+    }
+  }
+  return { sent, skipped };
+}
+
+async function sendGuideEmail(env, to, guide, url) {
+  if (!env.RESEND_API_KEY) return false;
+  const toolsHtml = (guide.tools || []).map((t) => `<li><a href="${t.url}">${t.emoji || ""} ${t.label}</a></li>`).join("");
+  const stepsHtml = (guide.steps || []).map((s) => `<li><strong>${s.title}</strong> ${s.detail}</li>`).join("");
+  const emailHtml = `
+    <h2>${guide.project}</h2>
+    <p>${guide.description}</p>
+    <p><strong>Difficulty:</strong> ${guide.difficulty} &nbsp; <strong>Time:</strong> ${guide.time_est} &nbsp; <strong>Cost:</strong> ${guide.cost_est}</p>
+    <h3>Tools needed</h3><ul>${toolsHtml}</ul>
+    <h3>Steps</h3><ol>${stepsHtml}</ol>
+    <p>${guide.warning_html || ""}</p>
+    <p>${guide.tip_html || ""}</p>
+    <p><a href="${url}">See the full formatted guide online &rarr;</a></p>
+    <p>Thanks for using ${SITE_NAME}!</p>
+  `;
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      from: `${SITE_NAME} <guides@eonic.cloud>`,
+      to,
+      subject: `Your DIY guide: ${guide.project}`,
+      html: emailHtml,
+    }),
+  });
+  return res.ok;
+}
+
+/* manual/testing trigger for the same job the Cron runs, gated by the existing feed key */
+async function runDiyFulfillmentEndpoint(request, env, url) {
+  const key = url.searchParams.get("key") || "";
+  if (!env.ADMIN_KEY || key !== env.ADMIN_KEY) return new Response("Not found", { status: 404 });
+  const result = await fulfillDiyRequests(env);
+  return json({ status: "ok", ...result });
 }
 
 /* ---------- internal feed (token-gated) for the NightShift lead-monitor ---------- */

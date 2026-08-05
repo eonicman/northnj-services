@@ -19,5 +19,8 @@
       "database_name": "directory-leads",
       "database_id": "6e62cee1-81ba-4d35-917e-708087500877"
     }
-  ]
+  ],
+  "triggers": {
+    "crons": ["*/15 * * * *"]
+  }
 }
