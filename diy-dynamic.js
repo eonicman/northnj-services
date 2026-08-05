@@ -103,6 +103,7 @@ async function loadDIYGuides(category, limit) {
       return;
     }
     grid.innerHTML = guides.map(renderCard).join("");
+    grid.style.minHeight = "";
     grid.querySelectorAll(".diy-card").forEach((card) => {
       card.classList.add("collapsed");
       card.addEventListener("click", function (e) {
