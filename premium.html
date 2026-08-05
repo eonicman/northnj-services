@@ -30,6 +30,12 @@
         .pay-methods h4 { margin-bottom: .5rem; color: #333; }
         .pay-methods p { font-size: .9rem; color: #555; margin: .3rem 0; }
         .footer { background: #1a1a2e; color: #aaa; text-align: center; padding: 1.5rem; font-size: .85rem; margin-top: 2rem; }
+        .signup-form { background: #fff; border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0; box-shadow: 0 4px 12px rgba(0,0,0,.1); }
+        .signup-form h2 { color: #0f3460; margin-bottom: 1rem; font-size: 1.2rem; }
+        .signup-form label { display: block; font-size: .85rem; font-weight: 600; color: #333; margin: .75rem 0 .3rem; }
+        .signup-form input, .signup-form select { width: 100%; padding: .6rem .75rem; border: 1px solid #ccc; border-radius: 6px; font-size: .95rem; }
+        .signup-error { color: #e94560; font-size: .85rem; margin-top: .5rem; display: none; }
+        .btn:disabled { opacity: .6; cursor: not-allowed; }
     </style>
 </head>
 <body>
@@ -38,6 +44,28 @@
         <p>Upgrade your business listing on North NJ Services</p>
     </div>
     <div class="container">
+        <div class="signup-form">
+            <h2>Your business info</h2>
+            <label for="pf-business">Business name</label>
+            <input type="text" id="pf-business" placeholder="Your business name" required>
+            <label for="pf-category">Category</label>
+            <select id="pf-category" required>
+                <option value="">Select a category&hellip;</option>
+                <option value="plumbing">Plumbing</option>
+                <option value="electrical">Electrical</option>
+                <option value="hvac">HVAC</option>
+                <option value="landscaping">Landscaping</option>
+                <option value="roofing">Roofing</option>
+                <option value="painting">Painting</option>
+                <option value="cleaning">Cleaning</option>
+                <option value="computers">Computers</option>
+            </select>
+            <label for="pf-phone">Phone</label>
+            <input type="tel" id="pf-phone" placeholder="(555) 123-4567">
+            <label for="pf-email">Email</label>
+            <input type="email" id="pf-email" placeholder="you@yourbusiness.com" required>
+            <div class="signup-error" id="pf-error"></div>
+        </div>
         <div class="plan">
             <h2>Free Listing</h2>
             <div class="price">$0<span>/month</span></div>
@@ -62,7 +90,7 @@
                 <li>Priority in search results</li>
                 <li>"Verified Business" badge</li>
             </ul>
-            <a href="https://buy.stripe.com/7sY6ozbzO7eO0gb4oDfnO01" class="btn">⚡ Pay with Stripe — Monthly</a>
+            <button type="button" class="btn" data-plan="monthly" onclick="startCheckout(this)">⚡ Start Monthly — $29/mo</button>
             <div class="pay-methods">
                 <h4>Payment Options:</h4>
                 <p>📞 Or call/text (855) ARIA-773</p>
@@ -76,7 +104,7 @@
                 <li>Save $58/year vs monthly</li>
                 <li>Priority customer support</li>
             </ul>
-            <a href="https://buy.stripe.com/eVq7sDfQ49mW3sn7APfnO00" class="btn btn-secondary">⚡ Pay with Stripe — Annual</a>
+            <button type="button" class="btn btn-secondary" data-plan="annual" onclick="startCheckout(this)">⚡ Start Annual — $290/yr</button>
         </div>
         <p style="text-align:center; margin-top:2rem; color:#888; font-size:.9rem;">
             Questions? <a href="tel:8552724773" style="color:#e94560;">Call (855) ARIA-773</a> &bull; <a href="/contact.html" style="color:#e94560;">Text Us</a>
@@ -85,5 +113,42 @@
     <div class="footer">
         <p>© 2026 North NJ Services — Local Business Directory</p>
     </div>
+<script>
+async function startCheckout(btn) {
+    const business = document.getElementById('pf-business').value.trim();
+    const category = document.getElementById('pf-category').value;
+    const phone = document.getElementById('pf-phone').value.trim();
+    const email = document.getElementById('pf-email').value.trim();
+    const errEl = document.getElementById('pf-error');
+    errEl.style.display = 'none';
+    if (!business || !category || !email) {
+        errEl.textContent = 'Please fill in business name, category, and email above before checkout.';
+        errEl.style.display = 'block';
+        document.querySelector('.signup-form').scrollIntoView({ behavior: 'smooth' });
+        return;
+    }
+    btn.disabled = true;
+    const originalText = btn.textContent;
+    btn.textContent = 'Redirecting to checkout…';
+    try {
+        const resp = await fetch('/api/premium-checkout', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ business, category, phone, email, plan: btn.dataset.plan }),
+        });
+        const data = await resp.json();
+        if (data.status === 'ok' && data.url) {
+            window.location.href = data.url;
+        } else {
+            throw new Error(data.message || 'Checkout could not be started');
+        }
+    } catch (e) {
+        errEl.textContent = e.message || 'Something went wrong — please try again or call (855) ARIA-773.';
+        errEl.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = originalText;
+    }
+}
+</script>
 </body>
 </html>

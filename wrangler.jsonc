@@ -9,9 +9,14 @@
   "observability": {
     "enabled": true
   },
+  "vars": {
+    "STRIPE_PRICE_MONTHLY": "price_1U1E1QQts1c0fveCbsJQMTUY",
+    "STRIPE_PRICE_ANNUAL": "price_1U1E1QQts1c0fveC9b5nV35Y"
+  },
   "assets": {
     "directory": ".",
-    "binding": "ASSETS"
+    "binding": "ASSETS",
+    "run_worker_first": ["/category/*"]
   },
   "d1_databases": [
     {
