@@ -45,7 +45,7 @@ export default {
       if (p === "/api/user/login" && request.method === "POST") return userLogin(request, env, url);
       if (p === "/api/user/me" && request.method === "GET") return userMe(request, env, url);
       if (p === "/api/user/save-guide" && request.method === "POST") return userSaveGuide(request, env, url);
-      if (/^\/category\/(?!.*-diy)[a-z0-9-]+(\.html)?$/.test(p) && request.method === "GET") {
+      if (/^\/category\/(?!.*-diy)[a-z0-9-]+(\/[a-z0-9-]+)?(\.html)?$/.test(p) && request.method === "GET") {
         return renderCategoryPage(request, env, url);
       }
     } catch (e) {
@@ -273,10 +273,22 @@ function findDivBlockEnd(html, startIdx) {
 }
 
 async function renderCategoryPage(request, env, url) {
-  const category = url.pathname.replace(/^\/category\//, "").replace(/\.html$/, "");
+  const parts = url.pathname.replace(/^\/category\//, "").replace(/\.html$/, "").split("/");
+  const category = parts[0];
+  const townSlug = parts[1] || null;
+
+  if (townSlug) {
+    const qualifies = await env.LEADS.prepare(
+      `SELECT COUNT(*) as cnt FROM businesses WHERE site=? AND category=? AND town_slug=? AND status='active'`
+    ).bind(url.host, category, townSlug).first();
+    if (!qualifies || qualifies.cnt < 2) return new Response("Not Found", { status: 404 });
+  }
+
   // Fetch the canonical extensionless path -- asking ASSETS for the `.html` form gets a 307
   // (Cloudflare's default html_handling normalizes to extensionless), which would otherwise
-  // short-circuit this function before the D1 rendering ever runs.
+  // short-circuit this function before the D1 rendering ever runs. Town pages reuse the base
+  // category shell (no separate static file per town) -- only the category segment maps to a
+  // real asset path.
   const assetUrl = new URL(url);
   assetUrl.pathname = `/category/${category}`;
   const resp = await env.ASSETS.fetch(new Request(assetUrl, request));
@@ -289,14 +301,39 @@ async function renderCategoryPage(request, env, url) {
   const endIdx = findDivBlockEnd(html, startIdx);
   if (endIdx === -1) return new Response(html, { status: resp.status, headers: resp.headers });
 
-  const rows = await env.LEADS.prepare(
-    `SELECT name, category, phone, address, website, premium, rating, review_count FROM businesses
-     WHERE site=? AND category=? AND status='active'
-     ORDER BY premium DESC, sort_order ASC, name ASC`
-  ).bind(url.host, category).all();
+  const rows = townSlug
+    ? await env.LEADS.prepare(
+        `SELECT name, category, phone, address, website, premium, rating, review_count, town FROM businesses
+         WHERE site=? AND category=? AND town_slug=? AND status='active'
+         ORDER BY premium DESC, sort_order ASC, name ASC`
+      ).bind(url.host, category, townSlug).all()
+    : await env.LEADS.prepare(
+        `SELECT name, category, phone, address, website, premium, rating, review_count FROM businesses
+         WHERE site=? AND category=? AND status='active'
+         ORDER BY premium DESC, sort_order ASC, name ASC`
+      ).bind(url.host, category).all();
 
   const cards = (rows.results || []).map(bizCardHtml).join("\n            ");
-  const rendered = PREMIUM_CSS + startTag + "\n\n            " + cards + "\n    </div>";
+
+  let introHtml = "";
+  if (townSlug) {
+    const townName = rows.results?.[0]?.town || townSlug;
+    introHtml = `<p style="margin-bottom:1rem;color:#555;">Looking for ${escapeHtml(category)} services in ${escapeHtml(townName)}, NJ? Browse verified local businesses below.</p>`;
+  } else {
+    const towns = await env.LEADS.prepare(
+      `SELECT town, town_slug, COUNT(*) as cnt FROM businesses
+       WHERE site=? AND category=? AND status='active' AND town_slug IS NOT NULL
+       GROUP BY town_slug HAVING cnt >= 2 ORDER BY town`
+    ).bind(url.host, category).all();
+    if (towns.results?.length) {
+      const links = towns.results.map(t =>
+        `<a href="/category/${category}/${t.town_slug}.html" style="margin-right:.75rem;">${escapeHtml(t.town)}</a>`
+      ).join("");
+      introHtml = `<div style="margin-bottom:1rem;font-size:.9rem;">Browse by town: ${links}</div>`;
+    }
+  }
+
+  const rendered = PREMIUM_CSS + introHtml + startTag + "\n\n            " + cards + "\n    </div>";
   const newHtml = html.slice(0, startIdx) + rendered + html.slice(endIdx);
 
   return new Response(newHtml, { status: resp.status, headers: resp.headers });
