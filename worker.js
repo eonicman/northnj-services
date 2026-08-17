@@ -13,6 +13,9 @@
 //   POST /api/user/login           -> verify password, return session token
 //   GET  /api/user/me              -> current user + saved_guides (Bearer token)
 //   POST /api/user/save-guide      -> save a guide to the signed-in user's library
+//   GET  /                         -> static homepage, but with the #aria-ad-embed block
+//                                      rewritten to the ad video matching the visitor's
+//                                      selected language (site_lang cookie)
 //   everything else                -> static assets (env.ASSETS), unchanged
 // D1 binding: env.LEADS -> database "directory-leads" (shared with mohawk-valley-services;
 //   tables scoped by `site` = url.host, including users/user_sessions/saved_guides).
@@ -47,6 +50,9 @@ export default {
       if (p === "/api/user/save-guide" && request.method === "POST") return userSaveGuide(request, env, url);
       if (/^\/category\/(?!.*-diy)[a-z0-9-]+(\/[a-z0-9-]+)?(\.html)?$/.test(p) && request.method === "GET") {
         return renderCategoryPage(request, env, url);
+      }
+      if (p === "/" && request.method === "GET") {
+        return renderLangMatchedAd(request, env);
       }
     } catch (e) {
       return json({ status: "error", message: "server error" }, 500);
@@ -270,6 +276,44 @@ function findDivBlockEnd(html, startIdx) {
     }
   }
   return -1;
+}
+
+// Language -> Aria ad video variant. "en" is the original YouTube embed already in the
+// static HTML, so it needs no rewrite. Every other language is a self-hosted mp4 (no
+// per-language YouTube upload/metadata to manage) served from env.ASSETS at the path
+// below -- drop a new file there and add one line here to add a language.
+const ARIA_AD_VIDEO = {
+  es: "/assets/ads/aria-ad-es.mp4",
+};
+
+function pickAdLang(request) {
+  const cookie = request.headers.get("Cookie") || "";
+  const m = cookie.match(/(?:^|;\s*)site_lang=([a-z]{2})/);
+  return m && ARIA_AD_VIDEO[m[1]] ? m[1] : "en";
+}
+
+async function renderLangMatchedAd(request, env) {
+  const resp = await env.ASSETS.fetch(request);
+  if (!resp.ok || !(resp.headers.get("content-type") || "").includes("text/html")) return resp;
+
+  const lang = pickAdLang(request);
+  if (lang === "en") return resp; // static HTML already has the English YouTube embed
+
+  const html = await resp.text();
+  const startTag = '<div id="aria-ad-embed"';
+  const startIdx = html.indexOf(startTag);
+  if (startIdx === -1) return new Response(html, { status: resp.status, headers: resp.headers });
+  const tagEnd = html.indexOf(">", startIdx);
+  const endIdx = findDivBlockEnd(html, startIdx);
+  if (tagEnd === -1 || endIdx === -1) return new Response(html, { status: resp.status, headers: resp.headers });
+
+  const src = ARIA_AD_VIDEO[lang];
+  const replacement =
+    html.slice(startIdx, tagEnd + 1) +
+    `<video width="100%" height="100%" style="object-fit:cover" src="${src}" controls playsinline preload="metadata"></video>` +
+    "</div>";
+  const out = html.slice(0, startIdx) + replacement + html.slice(endIdx);
+  return new Response(out, { status: resp.status, headers: resp.headers });
 }
 
 async function renderCategoryPage(request, env, url) {
