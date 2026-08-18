@@ -13,7 +13,7 @@
 //   POST /api/user/login           -> verify password, return session token
 //   GET  /api/user/me              -> current user + saved_guides (Bearer token)
 //   POST /api/user/save-guide      -> save a guide to the signed-in user's library
-//   GET  /                         -> static homepage, but with the #aria-ad-embed block
+//   GET  /                         -> static homepage, but with the #aria-video-embed block
 //                                      rewritten to the ad video matching the visitor's
 //                                      selected language (site_lang cookie)
 //   everything else                -> static assets (env.ASSETS), unchanged
@@ -283,7 +283,7 @@ function findDivBlockEnd(html, startIdx) {
 // per-language YouTube upload/metadata to manage) served from env.ASSETS at the path
 // below -- drop a new file there and add one line here to add a language.
 const ARIA_AD_VIDEO = {
-  es: "/assets/ads/aria-ad-es.mp4",
+  es: "/assets/media/aria-es.mp4",
 };
 
 function pickAdLang(request) {
@@ -300,7 +300,7 @@ async function renderLangMatchedAd(request, env) {
   if (lang === "en") return resp; // static HTML already has the English YouTube embed
 
   const html = await resp.text();
-  const startTag = '<div id="aria-ad-embed"';
+  const startTag = '<div id="aria-video-embed"';
   const startIdx = html.indexOf(startTag);
   if (startIdx === -1) return new Response(html, { status: resp.status, headers: resp.headers });
   const tagEnd = html.indexOf(">", startIdx);
