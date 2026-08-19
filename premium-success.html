@@ -21,7 +21,30 @@
         <h1>★ You're Premium!</h1>
         <p>Thanks for upgrading — your listing is being marked as featured now. It may take a minute
         to show up at the top of your category page.</p>
+        <div id="referral-box" style="display:none;margin-top:1.5rem;padding:1.25rem;background:#0f3460;border-radius:10px;">
+            <p style="color:#fff;font-weight:600;margin-bottom:.4rem;">💰 Earn $15 off for every referral</p>
+            <p style="font-size:.9rem;">Share your code with other local businesses. When one of them becomes
+            Premium and mentions your code, you get $15 off your next invoice — and it stacks, so 3 referrals
+            means 3 months of $15 off.</p>
+            <p style="margin-top:.75rem;font-size:1.4rem;font-weight:700;letter-spacing:2px;color:#4ecdc4;" id="referral-code-display">···</p>
+        </div>
         <p style="margin-top:1.5rem"><a href="/">&larr; Back to the directory</a></p>
     </div>
+    <script>
+    (function() {
+        const params = new URLSearchParams(window.location.search);
+        const sessionId = params.get('session_id');
+        if (!sessionId) return;
+        fetch('/api/referral-info?session_id=' + encodeURIComponent(sessionId))
+            .then(r => r.json())
+            .then(data => {
+                if (data.status === 'ok' && data.referral_code) {
+                    document.getElementById('referral-code-display').textContent = data.referral_code;
+                    document.getElementById('referral-box').style.display = 'block';
+                }
+            })
+            .catch(() => {});
+    })();
+    </script>
 </body>
 </html>

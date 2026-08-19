@@ -44,6 +44,7 @@ export default {
       if (p === "/api/admin/run-diy-fulfillment" && request.method === "POST") return runDiyFulfillmentEndpoint(request, env, url);
       if (p === "/api/premium-checkout" && request.method === "POST") return premiumCheckout(request, env, url);
       if (p === "/stripe-webhook" && request.method === "POST") return stripeWebhook(request, env);
+      if (p === "/api/referral-info" && request.method === "GET") return referralInfo(request, env, url);
       if (p === "/api/user/register" && request.method === "POST") return userRegister(request, env, url);
       if (p === "/api/user/login" && request.method === "POST") return userLogin(request, env, url);
       if (p === "/api/user/me" && request.method === "GET") return userMe(request, env, url);
@@ -81,6 +82,124 @@ async function readBody(request) {
 }
 function slugify(s) {
   return S(s, 120).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 80);
+}
+
+/* ---------- referral program (2026-08-19) ----------
+   Flat $15-off-next-invoice kickback, stacking one additional month per
+   converted referral (Peter's call: 3 referrals = 3 months of $15 off, not
+   one bigger discount). Since Stripe coupons are templates with a fixed
+   duration baked in, "stacking" is implemented by re-issuing a fresh
+   `duration=repeating, duration_in_months=<running total>` coupon each time
+   a referral converts and replacing the referrer's subscription discount
+   with it -- this resets the N-months-from-now window on every new
+   conversion, which is a reasonable reading of "extends the discount",
+   not a precise ledger of exact months already consumed. Coupon IDs are
+   deterministic per count (referral-15-Nmo) so repeat conversions at the
+   same running total reuse the same Stripe object instead of creating dupes. */
+const REFERRAL_CODE_ALPHABET = "23456789ABCDEFGHJKMNPQRSTUVWXYZ"; // no 0/O/1/I/L -- read back over the phone
+function genReferralCode() {
+  const bytes = crypto.getRandomValues(new Uint8Array(6));
+  let code = "";
+  for (const b of bytes) code += REFERRAL_CODE_ALPHABET[b % REFERRAL_CODE_ALPHABET.length];
+  return code;
+}
+async function ensureReferralCode(env, businessId) {
+  const row = await env.LEADS.prepare(`SELECT referral_code FROM businesses WHERE id=?`).bind(businessId).first();
+  if (row?.referral_code) return row.referral_code;
+  for (let i = 0; i < 5; i++) {
+    const code = genReferralCode();
+    try {
+      await env.LEADS.prepare(`UPDATE businesses SET referral_code=? WHERE id=? AND referral_code IS NULL`).bind(code, businessId).run();
+      const check = await env.LEADS.prepare(`SELECT referral_code FROM businesses WHERE id=?`).bind(businessId).first();
+      if (check?.referral_code === code) return code;
+    } catch (err) { /* collision on unique index -- retry with a new code */ }
+  }
+  return null;
+}
+async function creditReferral(env, referralCode, newBusinessId) {
+  const referrer = await env.LEADS.prepare(
+    `SELECT id, site, name, email, stripe_subscription_id, referral_conversion_count FROM businesses WHERE referral_code=?`
+  ).bind(referralCode).first();
+  if (!referrer || !referrer.stripe_subscription_id) return; // no referrer, or referrer isn't actually premium -- nothing to credit
+
+  await env.LEADS.prepare(`UPDATE businesses SET referred_by_code=? WHERE id=?`).bind(referralCode, newBusinessId).run();
+
+  const newCount = (referrer.referral_conversion_count || 0) + 1;
+  const couponId = `referral-15-${newCount}mo`;
+
+  // Idempotent coupon creation: reuse the object if this count-level coupon already exists.
+  let couponResp = await fetch(`https://api.stripe.com/v1/coupons`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${env.STRIPE_SECRET_KEY}`, "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      id: couponId, amount_off: "1500", currency: "usd",
+      duration: "repeating", duration_in_months: String(newCount),
+      name: `Referral Reward x${newCount} ($15/mo, ${newCount}mo)`,
+    }),
+  });
+  if (!couponResp.ok) {
+    const err = await couponResp.json().catch(() => ({}));
+    if (err?.error?.code !== "resource_already_exists") {
+      console.error("referral coupon create failed", err);
+      return;
+    }
+  }
+
+  const subResp = await fetch(`https://api.stripe.com/v1/subscriptions/${referrer.stripe_subscription_id}`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${env.STRIPE_SECRET_KEY}`, "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({ "discounts[0][coupon]": couponId }),
+  });
+  if (!subResp.ok) {
+    console.error("referral discount apply failed", await subResp.json().catch(() => ({})));
+    return;
+  }
+
+  await env.LEADS.prepare(`UPDATE businesses SET referral_conversion_count=? WHERE id=?`).bind(newCount, referrer.id).run();
+  await env.LEADS.prepare(
+    `INSERT INTO leads (site, source, business, email, interest, message, created_at)
+     VALUES (?,?,?,?,'referral-conversion',?, datetime('now'))`
+  ).bind(referrer.site, "stripe-webhook", referrer.name, referrer.email, `Referral converted -- now ${newCount} month(s) of $15 off applied`).run();
+
+  if (referrer.email) await sendReferralCongratsEmail(env, referrer.email, referrer.name, newCount);
+}
+
+async function sendReferralCongratsEmail(env, to, referrerName, monthsOfDiscount) {
+  if (!env.RESEND_API_KEY) return false;
+  const emailHtml = `
+    <h2>🎉 Congratulations!</h2>
+    <p>Someone you referred to ${SITE_NAME} just became a Premium member.</p>
+    <p><strong>$15 has been applied to your next invoice</strong> -- and since this brings your
+    total to ${monthsOfDiscount} referred conversion${monthsOfDiscount === 1 ? "" : "s"},
+    that discount now covers your next <strong>${monthsOfDiscount} month${monthsOfDiscount === 1 ? "" : "s"}</strong>.</p>
+    <p>Keep sharing your referral code -- every business that becomes Premium through you
+    adds another month of $15 off.</p>
+    <p>Thanks for spreading the word, ${referrerName}!</p>
+  `;
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      from: `${SITE_NAME} <guides@eonic.cloud>`,
+      to,
+      subject: `🎉 Your referral just converted -- $15 off applied!`,
+      html: emailHtml,
+    }),
+  });
+  return res.ok;
+}
+async function referralInfo(request, env, url) {
+  const sessionId = url.searchParams.get("session_id");
+  if (!sessionId) return json({ status: "error", message: "session_id required" }, 400);
+  const sResp = await fetch(`https://api.stripe.com/v1/checkout/sessions/${sessionId}`, {
+    headers: { Authorization: `Bearer ${env.STRIPE_SECRET_KEY}` },
+  });
+  if (!sResp.ok) return json({ status: "error", message: "session not found" }, 404);
+  const session = await sResp.json();
+  const businessId = parseInt(session.client_reference_id, 10);
+  if (!businessId) return json({ status: "error", message: "no business on this session" }, 400);
+  const code = await ensureReferralCode(env, businessId);
+  return json({ status: "ok", referral_code: code });
 }
 function categoryFrom(page, fallback) {
   const m = /\/category\/([^/.?#]+)/i.exec(page || "");
@@ -391,6 +510,7 @@ async function premiumCheckout(request, env, url) {
   const phone = S(data.phone, 60);
   const email = S(data.email, 200);
   const plan = data.plan === "annual" ? "annual" : "monthly";
+  const referralCode = S(data.referral_code, 12).trim().toUpperCase();
   if (!business || !category || !email) return json({ status: "error", message: "business, category, and email are required" }, 400);
 
   const priceId = plan === "annual" ? env.STRIPE_PRICE_ANNUAL : env.STRIPE_PRICE_MONTHLY;
@@ -420,6 +540,7 @@ async function premiumCheckout(request, env, url) {
     "metadata[site]": url.host,
     "metadata[category]": category,
     "metadata[plan]": plan,
+    ...(referralCode ? { "metadata[referral_code]": referralCode } : {}),
   });
 
   const stripeResp = await fetch("https://api.stripe.com/v1/checkout/sessions", {
@@ -474,6 +595,9 @@ async function stripeWebhook(request, env) {
            VALUES (?,?,?,?,'premium-activated',?, datetime('now'))`
         ).bind(biz.site, "stripe-webhook", biz.name, biz.email, `Premium ${plan} activated`).run();
       }
+      await ensureReferralCode(env, businessId);
+      const referralCode = S(obj.metadata?.referral_code, 12).trim().toUpperCase();
+      if (referralCode) await creditReferral(env, referralCode, businessId);
     }
   } else if (event.type === "customer.subscription.deleted") {
     const subId = S(obj.id, 200);
