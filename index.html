@@ -107,10 +107,12 @@
             <option value="es">Español</option>
             <option value="tl">Tagalog</option>
             <option value="zh">中文</option>
+            <option value="hi">हिन्दी</option>
+            <option value="ko">한국어</option>
         </select>
     </label>
 </div>
-<script>(function(){var m=document.cookie.match(/(?:^|;\s*)site_lang=([a-z]{2})/);var l=(m&&['en','es','tl','zh'].indexOf(m[1])>-1)?m[1]:'en';var s=document.getElementById('site-lang-select');if(s)s.value=l;})();</script>
+<script>(function(){var m=document.cookie.match(/(?:^|;\s*)site_lang=([a-z]{2})/);var l=(m&&['en','es','tl','zh','hi','ko'].indexOf(m[1])>-1)?m[1]:'en';var s=document.getElementById('site-lang-select');if(s)s.value=l;})();</script>
 
 <div class="header">
     <h1>North NJ Services</h1>
@@ -307,7 +309,7 @@
 
     <!-- Aria promo -- moved to bottom + shrunk ~half, per Peter 2026-08-19 (was blocking the category grid above the fold) -->
     <div style="max-width:700px;margin:2rem auto 1rem;background:linear-gradient(135deg,#0a0a12 0%,#16213e 50%,#0f3460 100%);border-radius:10px;padding:1rem;display:flex;flex-wrap:wrap;align-items:center;gap:1rem;border:1px solid rgba(167,139,250,.3);">
-        <div style="flex:0 0 140px;max-width:140px;aspect-ratio:9/16;border-radius:6px;overflow:hidden;">
+        <div id="aria-video-embed" style="flex:0 0 140px;max-width:140px;aspect-ratio:9/16;border-radius:6px;overflow:hidden;">
             <iframe width="100%" height="100%" src="https://www.youtube.com/embed/01pqXh6bdvI" title="Meet Aria — Your AI Receptionist, 24/7" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
         <div style="flex:1;min-width:220px;">

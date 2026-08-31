@@ -405,6 +405,8 @@ const ARIA_AD_VIDEO = {
   es: "/assets/media/aria-es.mp4",
   tl: "/assets/media/aria-tl.mp4",
   zh: "/assets/media/aria-zh.mp4",
+  hi: "/assets/media/aria-hi.mp4",
+  ko: "/assets/media/aria-ko.mp4",
 };
 
 function pickAdLang(request) {
