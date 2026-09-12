@@ -103,12 +103,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://northnjservices.com/category/computers/clifton.html</loc>
-    <lastmod>2026-08-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://northnjservices.com/category/electrical/clifton.html</loc>
     <lastmod>2026-08-15</lastmod>
     <changefreq>monthly</changefreq>
@@ -145,31 +139,7 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://northnjservices.com/category/plumbing/denville.html</loc>
-    <lastmod>2026-08-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://northnjservices.com/category/roofing/denville.html</loc>
-    <lastmod>2026-08-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://northnjservices.com/category/roofing/fair-lawn.html</loc>
-    <lastmod>2026-08-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://northnjservices.com/category/roofing/garfield.html</loc>
-    <lastmod>2026-08-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://northnjservices.com/category/computers/glen-rock.html</loc>
     <lastmod>2026-08-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -188,12 +158,6 @@
   </url>
   <url>
     <loc>https://northnjservices.com/category/plumbing/paramus.html</loc>
-    <lastmod>2026-08-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://northnjservices.com/category/plumbing/rockaway.html</loc>
     <lastmod>2026-08-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -241,8 +205,14 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://northnjservices.com/category/hvac/whippany.html</loc>
-    <lastmod>2026-08-15</lastmod>
+    <loc>https://northnjservices.com/category/auto-repair/wayne.html</loc>
+    <lastmod>2026-09-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://northnjservices.com/category/dry-cleaning/sparta.html</loc>
+    <lastmod>2026-09-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>

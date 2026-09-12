@@ -450,7 +450,7 @@ async function renderCategoryPage(request, env, url) {
     const qualifies = await env.LEADS.prepare(
       `SELECT COUNT(*) as cnt FROM businesses WHERE site=? AND category=? AND town_slug=? AND status='active'`
     ).bind(url.host, category, townSlug).first();
-    if (!qualifies || qualifies.cnt < 2) return new Response("Not Found", { status: 404 });
+    if (!qualifies || qualifies.cnt < 3) return new Response("Not Found", { status: 404 });
   }
 
   // Fetch the canonical extensionless path -- asking ASSETS for the `.html` form gets a 307
@@ -492,7 +492,7 @@ async function renderCategoryPage(request, env, url) {
     const towns = await env.LEADS.prepare(
       `SELECT town, town_slug, COUNT(*) as cnt FROM businesses
        WHERE site=? AND category=? AND status='active' AND town_slug IS NOT NULL
-       GROUP BY town_slug HAVING cnt >= 2 ORDER BY town`
+       GROUP BY town_slug HAVING cnt >= 3 ORDER BY town`
     ).bind(url.host, category).all();
     if (towns.results?.length) {
       const links = towns.results.map(t =>
